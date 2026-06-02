@@ -1,0 +1,48 @@
+---
+import { CAL_LINK, CAL_NAMESPACE, CAL_CONFIG } from '../config';
+
+const stats = [
+  '20+ years in enterprise systems',
+  '4-week delivery',
+  'USA-focused · CR-based',
+];
+---
+
+<section id="contact" class="bg-cream px-5 md:px-16 py-24 flex flex-col items-start" style="border-bottom: 0.5px solid #E7E1D6;">
+
+  <span class="eyebrow text-navy/60 block mb-6">Let's work together</span>
+
+  <h2 class="font-serif text-[32px] md:text-[40px] text-navy max-w-2xl mb-8 leading-tight">
+    Your firm deserves systems that actually work.
+  </h2>
+
+  <p class="font-sans text-[17px] leading-relaxed max-w-xl mb-10" style="color: rgba(30, 42, 56, 0.8);">
+    We take on 2–3 new clients per quarter. If the fit is right, we move fast.
+  </p>
+
+  <div class="flex flex-col gap-6 items-start">
+    <button
+      data-cal-link={CAL_LINK}
+      data-cal-namespace={CAL_NAMESPACE}
+      data-cal-config={CAL_CONFIG}
+      class="bg-navy text-cream px-8 py-4 font-sans text-[13px] font-medium tracking-wide hover:opacity-90 transition-opacity uppercase cursor-pointer"
+    >
+      Book a discovery call
+    </button>
+  </div>
+
+  <!-- Social proof strip -->
+  <div class="mt-24 pt-12 w-full" style="border-top: 0.5px solid rgba(30, 42, 56, 0.1);">
+    <div class="flex flex-col md:flex-row gap-6 md:gap-12 items-start md:items-center">
+      {stats.map((stat, i) => (
+        <>
+          <span class="eyebrow text-navy/70">{stat}</span>
+          {i < stats.length - 1 && (
+            <div class="hidden md:block w-px h-4 bg-navy/20"></div>
+          )}
+        </>
+      ))}
+    </div>
+  </div>
+
+</section>

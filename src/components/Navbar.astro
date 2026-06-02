@@ -1,0 +1,116 @@
+---
+import { CAL_LINK, CAL_NAMESPACE, CAL_CONFIG } from '../config';
+
+// Root-relative anchors so the nav works from any page (e.g. /work/<slug>),
+// not just the homepage.
+const links = [
+  { label: 'Services', href: '/#services' },
+  { label: 'Projects', href: '/#projects' },
+  { label: 'About',    href: '/#about' },
+  { label: 'Contact',  href: '/#contact' },
+];
+---
+
+<!-- Mobile drawer -->
+<nav
+  id="mobile-nav"
+  aria-label="Mobile navigation"
+  class="fixed inset-y-0 left-0 z-50 w-72 -translate-x-full bg-cream flex flex-col transition-transform duration-300 md:hidden"
+  style="border-right: 0.5px solid var(--color-cream-border);"
+>
+  <div class="flex items-center justify-between px-5 py-6" style="border-bottom: 0.5px solid var(--color-cream-border);">
+    <span class="font-serif text-[22px] font-semibold text-navy tracking-[0.5px]">HeyView</span>
+    <button id="nav-close" aria-label="Close menu" class="text-navy p-1">
+      <span class="material-symbols-outlined text-[20px]">close</span>
+    </button>
+  </div>
+
+  <div class="flex flex-col flex-1 px-5 py-8 gap-1">
+    {links.map((link) => (
+      <a
+        href={link.href}
+        class="flex items-center gap-3 px-3 py-3 text-muted text-[15px] font-medium hover:text-navy hover:bg-cream-border/40 transition-colors"
+      >
+        {link.label}
+      </a>
+    ))}
+  </div>
+
+  <div class="px-5 pb-8">
+    <button
+      data-cal-link={CAL_LINK}
+      data-cal-namespace={CAL_NAMESPACE}
+      data-cal-config={CAL_CONFIG}
+      class="block w-full bg-navy text-cream text-center px-6 py-3.5 font-sans text-[13px] font-medium tracking-wide hover:opacity-90 transition-opacity cursor-pointer"
+    >
+      Book a call
+    </button>
+  </div>
+</nav>
+
+<!-- Backdrop -->
+<div
+  id="nav-backdrop"
+  class="fixed inset-0 z-40 bg-navy/20 hidden md:hidden backdrop-blur-[1px]"
+></div>
+
+<!-- Top bar -->
+<header
+  class="sticky top-0 z-30 w-full bg-cream flex items-center justify-between px-5 md:px-16 h-20"
+  style="border-bottom: 0.5px solid var(--color-cream-border);"
+>
+  <div class="flex items-center gap-4">
+    <button id="nav-open" aria-label="Open menu" aria-expanded="false" class="md:hidden text-navy p-1">
+      <span class="material-symbols-outlined text-[22px]">menu</span>
+    </button>
+    <a href="/" class="font-serif text-[22px] font-semibold text-navy tracking-[0.5px]">
+      HeyView
+    </a>
+  </div>
+
+  <nav aria-label="Primary navigation" class="hidden md:flex items-center gap-8">
+    {links.map((link) => (
+      <a
+        href={link.href}
+        class="font-sans text-muted text-[13px] font-medium hover:text-navy transition-colors duration-200"
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+
+  <button
+    data-cal-link={CAL_LINK}
+    data-cal-config={CAL_CONFIG}
+    class="hidden md:inline-flex items-center bg-navy text-cream px-6 py-3 font-sans text-[13px] font-medium hover:opacity-90 transition-opacity cursor-pointer"
+  >
+    Book a call
+  </button>
+</header>
+
+<script>
+  const openBtn  = document.getElementById('nav-open');
+  const closeBtn = document.getElementById('nav-close');
+  const drawer   = document.getElementById('mobile-nav');
+  const backdrop = document.getElementById('nav-backdrop');
+
+  function openNav() {
+    drawer?.classList.remove('-translate-x-full');
+    backdrop?.classList.remove('hidden');
+    openBtn?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNav() {
+    drawer?.classList.add('-translate-x-full');
+    backdrop?.classList.add('hidden');
+    openBtn?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  openBtn?.addEventListener('click', openNav);
+  closeBtn?.addEventListener('click', closeNav);
+  backdrop?.addEventListener('click', closeNav);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
+  drawer?.querySelectorAll('a[href]').forEach((link) => link.addEventListener('click', closeNav));
+</script>

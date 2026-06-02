@@ -1,0 +1,79 @@
+---
+import { CAL_LINK, CAL_CONFIG } from '../config';
+
+const steps = [
+  {
+    number: '01',
+    week: 'Week 01',
+    title: 'Discovery',
+    body: 'Mapping the complex technical landscape and defining core constraints.',
+  },
+  {
+    number: '02',
+    week: 'Week 02',
+    title: 'Strategy',
+    body: 'Establishing the architectural blueprint and design tokens.',
+  },
+  {
+    number: '03',
+    week: 'Week 03',
+    title: 'Execution',
+    body: 'Developing the system with rapid iterative feedback loops.',
+  },
+  {
+    number: '04',
+    week: 'Week 04',
+    title: 'Handoff',
+    body: 'Delivering precise documentation and production-ready code.',
+  },
+];
+---
+
+<section id="process" class="grain bg-cream px-5 md:px-16 py-24"
+  style="border-bottom: 0.5px solid #E7E1D6;">
+
+  <span class="eyebrow text-navy/60 block mb-6">Our process</span>
+
+  <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal mb-20 leading-tight">
+    Four weeks. One system. Zero ambiguity.
+  </h2>
+
+  <div class="relative">
+    <!-- Timeline rule: vertical on mobile, horizontal on desktop -->
+    <div class="absolute bg-cream-border left-[5px] top-0 bottom-0 w-px md:left-0 md:top-[5px] md:bottom-auto md:w-full md:h-px"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 relative z-10">
+      {steps.map((step) => (
+        <div class="flex flex-row md:flex-col gap-6 md:gap-0">
+
+          <!-- Timeline dot -->
+          <div class="flex-shrink-0 w-3 md:w-full h-auto md:h-3 flex items-start md:items-center justify-center md:justify-start">
+            <div class="w-[11px] h-[11px] rounded-full bg-accent ring-2 ring-cream mt-0.5 md:mt-0"></div>
+          </div>
+
+          <!-- Step content -->
+          <div class="pt-0 md:pt-10 flex-1">
+            <span class="font-serif text-[52px] text-accent leading-none font-normal block mb-3">
+              {step.number}
+            </span>
+            <span class="eyebrow text-navy/60 block mb-3">{step.week}</span>
+            <h3 class="font-serif text-[22px] text-navy font-normal mb-2">{step.title}</h3>
+            <p class="font-sans text-[13px] text-navy/70 leading-relaxed">{step.body}</p>
+          </div>
+
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="flex justify-center mt-20">
+    <button
+      data-cal-link={CAL_LINK}
+      data-cal-config={CAL_CONFIG}
+      class="bg-navy text-cream px-8 py-4 font-sans text-[13px] font-medium tracking-wide hover:opacity-90 transition-opacity uppercase cursor-pointer"
+    >
+      Book a discovery call
+    </button>
+  </div>
+
+</section>

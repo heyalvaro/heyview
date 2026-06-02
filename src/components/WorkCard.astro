@@ -1,0 +1,72 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'work'>;
+  variant?: 'featured' | 'compact';
+  /** Extra classes for the outer element (e.g. grid column spans). */
+  class?: string;
+}
+
+const { project, variant = 'compact', class: className = '' } = Astro.props;
+const { title, summary, tag, cover, confidential } = project.data;
+
+// Confidential work has no detail page — point at contact instead.
+const hasPage = !confidential;
+const href = hasPage ? `/work/${project.id}` : '#contact';
+const cta = hasPage ? 'View project →' : 'Request case study →';
+const featured = variant === 'featured';
+---
+
+<article
+  class:list={['group flex flex-col', className]}
+  style="background-color: #243040; border-top: 0.5px solid rgba(140, 154, 139, 0.5);"
+>
+  {cover ? (
+    <div
+      role="img"
+      aria-label={title}
+      class:list={[
+        'w-full bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-500',
+        featured ? 'h-90 md:h-105' : 'min-h-45 flex-1',
+      ]}
+      style={`background-image: url('${cover}');`}
+    />
+  ) : (
+    <div
+      role="img"
+      aria-label={title}
+      class:list={[
+        'w-full flex items-center justify-center',
+        featured ? 'h-90 md:h-105' : 'min-h-45 flex-1',
+      ]}
+      style="background-image: linear-gradient(135deg, #2a3848 0%, #1a242f 100%);"
+    >
+      <span class="material-symbols-outlined text-cream/25" style={`font-size:${featured ? '64px' : '44px'};`}>monitoring</span>
+    </div>
+  )}
+  <div class:list={[featured ? 'p-6' : 'p-4']} style="border-top: 0.5px solid rgba(245, 240, 232, 0.15);">
+    <div class:list={['flex flex-col', featured ? 'gap-4' : 'gap-2']}>
+      <div class="flex justify-between items-center">
+        <span class="eyebrow text-accent">{tag}</span>
+        {confidential && <span class="eyebrow text-muted-soft">CONFIDENTIAL</span>}
+      </div>
+      <h3
+        class:list={[
+          'font-serif text-cream leading-tight',
+          featured ? 'text-[30px] md:text-[38px]' : 'text-[20px] font-medium leading-snug',
+        ]}
+      >
+        {hasPage ? <a href={href} class="hover:opacity-80 transition-opacity">{title}</a> : title}
+      </h3>
+      <p
+        class="font-sans text-[13px] leading-relaxed"
+        style={`color: rgba(245, 240, 232, ${featured ? '0.8' : '0.7'});`}
+      >{summary}</p>
+      <a
+        href={href}
+        class="font-sans text-[13px] text-muted-soft mt-2 w-fit hover:text-cream transition-colors"
+      >{cta}</a>
+    </div>
+  </div>
+</article>

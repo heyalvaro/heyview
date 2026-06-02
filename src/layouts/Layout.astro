@@ -1,0 +1,107 @@
+---
+import '../styles/global.css';
+import { SITE, SOCIALS } from '../config';
+import PostHog from '../components/posthog.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Override the default share image for this page (path under /public). */
+  image?: string;
+  /** og:type — 'website' for landing pages, 'article' for case studies. */
+  type?: 'website' | 'article';
+  /** Set true on thin/utility pages you don't want indexed. */
+  noindex?: boolean;
+}
+
+const {
+  title = 'HeyView — Design & AI Systems for Specialty Practices',
+  description = SITE.description,
+  image = SITE.ogImage,
+  type = 'website',
+  noindex = false,
+} = Astro.props;
+
+// Absolute URLs require `site` in astro.config.mjs (read via Astro.site).
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+
+// JSON-LD: helps Google rich results AND gives LLMs/AI crawlers clean,
+// machine-readable facts about who HeyView is.
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.legalName,
+  alternateName: SITE.name,
+  url: Astro.site?.href,
+  description: SITE.description,
+  slogan: SITE.tagline,
+  foundingLocation: SITE.country,
+  founder: SITE.founders.map((name) => ({ '@type': 'Person', name })),
+  sameAs: Object.values(SOCIALS),
+};
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: Astro.site?.href,
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F5F0E8" />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content={SITE.shortName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Structured data (rich results + AI/LLM grounding) -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+
+    <PostHog />
+
+    <!-- Material Symbols (icons only — all custom fonts are self-hosted) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-navy focus:text-cream focus:px-4 focus:py-2 focus:font-sans focus:text-[13px] focus:font-medium"
+    >Skip to content</a>
+    <slot />
+
+    <!-- Cal.com popup embed loader. Booking link lives in src/config.ts (CAL_LINK). -->
+    <script is:inline>
+      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", "discovery", {origin:"https://app.cal.com"});
+      Cal.ns.discovery("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#1E2A38"},"dark":{"cal-brand":"#F5F0E8"}},"hideEventTypeDetails":false,"layout":"month_view"});
+    </script>
+  </body>
+</html>

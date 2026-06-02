@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "@fontsource/eb-garamond/400.css";
+@import "@fontsource/eb-garamond/400-italic.css";
+@import "@fontsource/eb-garamond/500.css";
+@import "@fontsource/eb-garamond/500-italic.css";
+@import "@fontsource-variable/inter";
+
+/* ─── Design Tokens ──────────────────────────────────────────────────────── */
+@theme {
+  /* Brand palette */
+  --color-navy:         #1E2A38;   /* midnight-navy */
+  --color-navy-card:    #243040;   /* card surface on dark sections */
+  --color-cream:        #F5F0E8;   /* warm-white */
+  --color-cream-border: #E7E1D6;   /* stone */
+  --color-muted:        #3A4350;
+  --color-muted-soft:   #5A6167;
+  --color-accent:       #A87C52;   /* soft-copper */
+  --color-accent-green: #8C9A8B;   /* sage — use on dark backgrounds only */
+
+  /* Typography — variable fonts from Fontsource (self-hosted) */
+  --font-serif: "EB Garamond", Georgia, serif;
+  --font-sans:  "Inter Variable", "Inter", system-ui, sans-serif;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  body {
+    color: #3A4350;
+    background-color: #F5F0E8;
+  }
+
+  /* Hairline border shorthand */
+  .border-hairline {
+    border-width: 0.5px;
+  }
+
+  /* Visible focus ring for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid #1E2A38;
+    outline-offset: 3px;
+  }
+}
+
+/* ─── Utilities ──────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Grain texture — apply to any section that needs the subtle noise overlay */
+  .grain {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Lift all direct children above the grain layer */
+  .grain > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Overline label — used site-wide for section labels */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Rendered Markdown body for case-study pages (on dark navy bg) */
+  .prose-work > * + * {
+    margin-top: 1.25rem;
+  }
+  .prose-work h2 {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--color-cream);
+    margin-top: 2.5rem;
+  }
+  .prose-work h3 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--color-cream);
+    margin-top: 2rem;
+  }
+  .prose-work ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-work li {
+    margin-top: 0.5rem;
+  }
+  .prose-work a {
+    color: var(--color-cream);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-work blockquote {
+    border-left: 2px solid var(--color-accent);
+    padding-left: 1rem;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  /* Rendered Markdown body for case-study pages (on cream bg) */
+  .prose-light > * + * {
+    margin-top: 1.25rem;
+  }
+  .prose-light h2 {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #091523;
+    margin-top: 2.5rem;
+  }
+  .prose-light h3 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: #091523;
+    margin-top: 2rem;
+  }
+  .prose-light ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-light li {
+    margin-top: 0.5rem;
+  }
+  .prose-light a {
+    color: #091523;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-light blockquote {
+    border-left: 2px solid var(--color-accent);
+    padding-left: 1rem;
+    font-style: italic;
+    opacity: 0.75;
+  }
+}

@@ -1,0 +1,240 @@
+# SEO & AI Discoverability — HeyView
+
+How search engines **and** AI assistants (ChatGPT, Claude, Perplexity, Google AI
+Overviews) find, understand, and cite HeyView. Read top to bottom on Day 0;
+use the checklist at the end as you go.
+
+Canonical domain: **https://heyview.studio** (set once in `astro.config.mjs` → `site`).
+
+---
+
+## 1. What's already wired up ✅
+
+These ship automatically — no accounts or domain activation needed.
+
+| Thing | Where | Notes |
+|---|---|---|
+| Canonical URLs | `Layout.astro` | Derived from `Astro.site` + page path. |
+| Open Graph + Twitter cards | `Layout.astro` | Per-page `title`/`description`/`image` props. |
+| JSON-LD (`Organization` + `WebSite`) | `Layout.astro` | Reads from `src/config.ts` → `SITE`/`SOCIALS`. |
+| `sitemap-index.xml` | `@astrojs/sitemap` | Auto-generated on `npm run build`. |
+| `robots.txt` | `public/robots.txt` | Allows all + **explicitly opts in AI crawlers**. |
+| `llms.txt` | `public/llms.txt` | Plain-language brief for LLMs (see §4). |
+| `noindex` switch | `Layout.astro` prop | `<Layout noindex>` for thin/utility pages. |
+
+**Per-page metadata** — every page should pass its own title/description:
+
+```astro
+<Layout
+  title="Premium watch brand landing page — HeyView"
+  description="How we built an editorial, conversion-focused landing page for a luxury watch brand."
+  image="/work/watch-brand-og.jpg"
+  type="article"
+>
+```
+
+Title format: `Page-specific phrase — HeyView`. Keep ≤ ~60 chars, descriptions ≤ ~155.
+
+---
+
+## 2. Your action items (need the domain / accounts)
+
+You're waiting on the domain transfer before creating accounts. In order:
+
+### 2.1 — When the domain is live
+1. **Confirm `site` in `astro.config.mjs`** still matches the live domain (incl. www-vs-non-www — pick one and 301 the other at the host/DNS level).
+2. **Google Search Console** — verify the domain (DNS TXT record is easiest during transfer), then submit `https://heyview.studio/sitemap-index.xml`.
+3. **Bing Webmaster Tools** — same; Bing also feeds ChatGPT search. Worth the 5 minutes.
+4. **Create the OG image** — `public/og-image.jpg`, **1200×630**, with logo + tagline. Referenced by `SITE.ogImage`; until it exists, social shares have no preview image. Validate with the [Facebook](https://developers.facebook.com/tools/debug/) and [LinkedIn](https://www.linkedin.com/post-inspector/) inspectors.
+5. **Confirm socials** — update `SOCIALS.linkedin` in `src/config.ts` with the real handle (currently a guess). This drives JSON-LD `sameAs` and the footer.
+
+### 2.2 — Analytics (PostHog + Microsoft Clarity)
+Both are client scripts. Add them to `Layout.astro` so they load site-wide.
+**Gate them on production** so localhost dev doesn't pollute your data.
+
+Put keys in a `.env` file (already git-ignored) and read with `import.meta.env`:
+
+```
+# .env  (never commit real keys)
+PUBLIC_POSTHOG_KEY=phc_xxx
+PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+PUBLIC_CLARITY_ID=xxxxxxxx
+```
+
+Then in `Layout.astro`, before `</head>` (or just before `</body>`):
+
+```astro
+---
+const PROD = import.meta.env.PROD;
+const POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY;
+const CLARITY_ID = import.meta.env.PUBLIC_CLARITY_ID;
+---
+
+{PROD && POSTHOG_KEY && (
+  <script is:inline define:vars={{ POSTHOG_KEY, POSTHOG_HOST: import.meta.env.PUBLIC_POSTHOG_HOST }}>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init(POSTHOG_KEY,{api_host:POSTHOG_HOST,person_profiles:'identified_only'})
+  </script>
+)}
+
+{PROD && CLARITY_ID && (
+  <script is:inline define:vars={{ CLARITY_ID }}>
+    (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script",CLARITY_ID);
+  </script>
+)}
+```
+
+> **Privacy/consent:** Clarity records sessions and PostHog tracks behavior.
+> Update `privacy-policy.astro` to name both tools, and consider whether you
+> need a cookie/consent banner for your audience (GDPR/CR data law). PostHog
+> can run cookieless; Clarity is first-party but still records sessions.
+
+### 2.3 — Off-site signals (the LLM/AI ranking lever)
+AI assistants cite sources they can corroborate. Build presence on properties
+they crawl heavily:
+- **LinkedIn company page** (and founders' profiles linking to the site).
+- **Google Business Profile** (even remote-first — establishes the entity).
+- Directory/listing on Clutch, The Manifest, or niche specialty-practice lists.
+- Anywhere you get mentioned, ensure the name is exactly **"HeyView"** and the
+  one-line descriptor matches `llms.txt` (consistency = entity confidence).
+
+---
+
+## 3. Classic SEO principles for this site
+
+- **One `<h1>` per page**, matching search intent. Sections use `<h2>`/`<h3>`.
+- **Semantic HTML** — already good (`<main>`, `<section>`, `<footer>`, skip link).
+- **Images**: every `<img>` needs descriptive `alt` + `width`/`height` (prevents
+  layout shift). Prefer Astro's `<Image>` (`astro:assets`) for local images to
+  get automatic WebP/AVIF + sizing. The current portfolio uses remote Google
+  CDN URLs as CSS backgrounds — replace with local optimized assets so you
+  control them and they're crawlable.
+- **Performance is SEO** — you're zero-JS by default; protect that. Core Web
+  Vitals (LCP, CLS, INP) are ranking factors. Self-host fonts (done), lazy-load
+  below-the-fold images, keep the hero image optimized.
+- **Internal links** with descriptive anchor text (not "click here").
+- **404 page** — add `src/pages/404.astro` so bad links degrade gracefully.
+
+---
+
+## 4. AI / LLM SEO ("GEO" — Generative Engine Optimization)
+
+Optimizing to be **understood and cited by LLMs**, not just ranked by Google.
+
+**Why our stack is already strong:** LLM crawlers read raw HTML and don't run
+JS well. A zero-JS, server-rendered Astro site is ideal — content is right there
+in the markup.
+
+**Levers, strongest first:**
+1. **Structured data (JSON-LD)** — done for the org. Add `CreativeWork`/article
+   schema per case study (see §5) and `FAQPage` if you add an FAQ. This is the
+   cleanest signal for machines.
+2. **`llms.txt`** (`public/llms.txt`) — an emerging convention ([llmstxt.org](https://llmstxt.org))
+   giving LLMs a curated, plain-language summary + key links. Keep it updated as
+   pages/services change.
+3. **Clear, factual, self-contained prose** — LLMs extract and quote sentences.
+   Write copy that states *who you are, what you do, and for whom* in plain
+   declarative sentences (the hero/about already do this well). Avoid burying
+   facts in imagery or vague marketing-speak.
+4. **Entity consistency** — same name, founders, descriptor everywhere (site,
+   `llms.txt`, LinkedIn, directories). Disagreement lowers AI confidence.
+5. **Allow the crawlers** — done in `robots.txt` (GPTBot, ClaudeBot,
+   PerplexityBot, Google-Extended, etc.). Blocking them = invisible to AI.
+6. **Question-shaped content** — pages/sections that answer real questions
+   ("How long does an AI automation project take?") get surfaced in AI answers.
+   A future blog or FAQ is the highest-leverage content you can add for this.
+
+---
+
+## 5. Portfolio / Projects — recommended approach
+
+**Your instinct is half right.** A CMS or database **for SEO** would be wasted
+effort *and can hurt you* (runtime cost, slower pages, nothing Google rewards).
+But the current setup — a hardcoded array inside `CaseStudies.astro` rendering
+one combined section — is **also leaving the biggest SEO win on the table.**
+
+### The actual SEO win: one indexable URL per project
+Right now all projects live at `/#projects`. Search engines and LLMs index
+**pages**, not anchors. Each case study should be its **own crawlable URL**
+(`/work/watch-brand-landing`) with its own title, description, OG image, and
+`CreativeWork` JSON-LD. That's how you rank for "luxury watch brand landing
+page" or get cited for "AI finance automation case study."
+
+### Recommended: Astro **Content Collections** (file-based, no DB, no CMS)
+This is the sweet spot for a developer-run site:
+
+- Each project is a Markdown/MDX file in `src/content/work/` with typed
+  frontmatter (title, client, tags, cover image, summary, body).
+- A `[...slug].astro` page renders each into its own static, zero-JS HTML page.
+- An index page (`/work`) lists them — replacing the hardcoded array.
+- **Type-safe** (zod schema catches mistakes at build), **version-controlled**
+  (git, no external service), **free**, and **as fast as the rest of the site.**
+- You write content in Markdown — faster than editing a CMS UI, and it lives in
+  the repo.
+
+```
+src/
+  content/
+    work/
+      watch-brand-landing.md      ← frontmatter + body
+      finance-automation.md
+  content.config.ts               ← zod schema (defineCollection)
+  pages/
+    work/
+      index.astro                 ← lists all projects
+      [...slug].astro             ← renders one project page
+```
+
+**When a CMS/DB *would* make sense (not now):**
+- A non-technical teammate needs to publish without touching git → layer a
+  **Git-based CMS** (Decap, Sveltia, or Astro's Keystatic) *on top of the same
+  content files*. No rearchitecting, still static.
+- Truly dynamic, per-user, or frequently-changing data (e.g. live dashboards).
+  None of that applies to a portfolio.
+
+**Bottom line:** Skip the CMS/DB. Move from the hardcoded array → Content
+Collections + per-project pages. Same dev simplicity, but you unlock individual
+indexable URLs, which is where portfolio SEO actually lives. Ping me when ready
+and I'll scaffold it.
+
+---
+
+## 6. Day-0 checklist
+
+```
+Already done (in the repo):
+[x] site set in astro.config.mjs (heyview.studio)
+[x] Canonical + OG + Twitter tags (Layout.astro)
+[x] JSON-LD Organization + WebSite
+[x] Sitemap (auto-generated on build)
+[x] robots.txt with AI crawlers allowed
+[x] llms.txt
+
+⚠️ BLOCKER before any deploy:
+[ ] Eyeball public/work/jnj/product-wireframes.html (embedded in the case study)
+    for any real figures — wireframe numbers are likely mock, but confirm.
+    (The unblurred dashboard screenshots were removed; the only dashboard image
+    now is the already-blurred cover.)
+
+Do when domain is live:
+[ ] Pick www vs non-www; 301 the other
+[ ] Verify Google Search Console + submit sitemap
+[ ] Verify Bing Webmaster Tools + submit sitemap
+[ ] Create public/og-image.jpg (1200×630) + validate with share inspectors
+[ ] Update SOCIALS.linkedin in src/config.ts with real handle
+
+Do when accounts exist:
+[ ] Add PostHog snippet (§2.2), key in .env
+[ ] Add Microsoft Clarity snippet (§2.2), id in .env
+[ ] Update privacy-policy.astro to name both tools
+
+Content / structure (next build phase):
+[x] Migrate portfolio → Content Collections, one URL per project (§5)
+[x] Add CreativeWork JSON-LD per case study (work/[...slug].astro)
+[x] /work index + per-project pages; homepage teaser reads the collection
+[ ] Per-page title + description on remaining pages (privacy-policy)
+[ ] Fill in real case-study copy in src/content/work/*.md
+[ ] Replace remote Google-CDN portfolio covers with local astro:assets
+[ ] Add src/pages/404.astro
+[ ] Consider a blog/FAQ for question-shaped AI-citable content
+```

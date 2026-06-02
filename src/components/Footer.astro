@@ -1,0 +1,37 @@
+---
+const links = [
+  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Contact', href: '#contact' },
+];
+---
+
+<footer class="px-5 md:px-16 py-16" style="background-color: #E7E1D6; border-top: 0.5px solid #E7E1D6;">
+
+  <!-- Logo row -->
+  <div class="flex justify-between items-start mb-8">
+    <div class="flex flex-col gap-3">
+      <span class="font-serif text-[22px] font-bold text-navy tracking-[0.5px]">HeyView</span>
+      <p class="font-sans text-[13px] text-muted">Clarity for complex systems.</p>
+    </div>
+    <a href="https://linkedin.com" aria-label="LinkedIn" class="transition-opacity hover:opacity-70" style="color: rgba(30, 42, 56, 0.7);">
+      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- Divider + bottom row -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pt-8" style="border-top: 0.5px solid rgba(30, 42, 56, 0.1);">
+    <div class="flex flex-row gap-6 overflow-x-auto">
+      {links.map((link) => (
+        <a href={link.href} class="eyebrow text-navy/70 hover:text-navy transition-colors">
+          {link.label}
+        </a>
+      ))}
+    </div>
+    <p class="font-sans text-[13px]" style="color: rgba(30, 42, 56, 0.7);">
+      © 2026 HeyView Studio. All rights reserved.
+    </p>
+  </div>
+
+</footer>

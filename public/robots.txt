@@ -1,0 +1,35 @@
+# HeyView — robots.txt
+# Served at https://heyview.studio/robots.txt
+
+# Default: allow everything (this is a public marketing site).
+User-agent: *
+Allow: /
+
+# AI / LLM crawlers — explicitly welcomed.
+# We WANT HeyView to be cited by AI assistants, so we opt in rather than block.
+# (Remove a block below to disallow a specific crawler.)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://heyview.studio/sitemap-index.xml

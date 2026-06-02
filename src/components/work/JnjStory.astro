@@ -1,0 +1,158 @@
+---
+// Bespoke, on-brand narrative for the J&J MedTech capacity-model case study.
+// Audience: an operations / plant owner — the story and the ROI, not the plumbing.
+// Rendered by src/pages/work/[...slug].astro in place of the generic body.
+
+const painStats = [
+  { v: '143', l: 'Spreadsheet tabs' },
+  { v: '5 min', l: 'Per recalculation' },
+  { v: '15–20 hrs', l: 'Lost per planner / week' },
+  { v: '6', l: 'Teams, no shared truth' },
+];
+
+// ROI — the numbers a plant owner cares about.
+const roi = [
+  { v: '15–20 hrs', l: 'Per planner, per week — reclaimed' },
+  { v: '5 min → live', l: 'Recalculations, gone' },
+  { v: '6 → 1', l: 'Teams on one source of truth' },
+  { v: '~3 weeks', l: 'From sketch to shipped dashboard' },
+];
+
+const outcomes = [
+  { h: 'Time given back', p: 'Planners stopped rebuilding spreadsheets by hand and got 15–20 hours a week back — for planning, not maintenance.' },
+  { h: 'One current truth', p: "Every team writes into one model, and leadership reads live numbers — not last week's manual refresh." },
+  { h: 'Grows without a rebuild', p: 'A new product or site is a few new rows, not a new spreadsheet. The third factory was modeled before it opened.' },
+  { h: 'No new software to buy', p: 'It runs on the Microsoft tools the team already owned — so there was nothing new to license or learn from scratch.' },
+];
+---
+
+<!-- 01 · THE PROBLEM -->
+<section class="bg-cream px-5 md:px-16 py-20" style="border-top: 0.5px solid #E7E1D6; border-bottom: 0.5px solid #E7E1D6;">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+    <div class="md:col-span-4">
+      <span class="font-serif text-[52px] text-accent leading-none block mb-4">01</span>
+      <span class="eyebrow text-accent-green block">The problem</span>
+    </div>
+    <div class="md:col-span-8 max-w-2xl">
+      <h2 class="font-serif text-[28px] md:text-[34px] text-navy font-normal leading-snug mb-6">
+        A spreadsheet was running capacity for two factories.
+      </h2>
+      <p class="font-sans text-[17px] leading-relaxed text-secondary">
+        After the Shockwave Medical acquisition, J&J MedTech planned production for two sites in a
+        single Excel file so large it could barely be opened — every recalculation took minutes.
+        Six teams each kept their own tabs, so the numbers leadership saw were only as fresh as the
+        last manual update, and every planner lost the better part of two days a week just keeping
+        it alive.
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
+        {painStats.map((s) => (
+          <div style="border-top: 0.5px solid #E7E1D6;" class="pt-4">
+            <div class="font-serif text-[26px] text-navy font-light leading-none">{s.v}</div>
+            <div class="eyebrow text-accent-green mt-2">{s.l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 · THE DESIGN -->
+<section class="bg-cream px-5 md:px-16 py-20" style="border-bottom: 0.5px solid #E7E1D6;">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
+    <div class="md:col-span-4">
+      <span class="font-serif text-[52px] text-accent leading-none block mb-4">02</span>
+      <span class="eyebrow text-accent-green block">The design</span>
+    </div>
+    <div class="md:col-span-8 max-w-2xl">
+      <h2 class="font-serif text-[28px] md:text-[34px] text-navy font-normal leading-snug mb-6">
+        We drew it before we built it.
+      </h2>
+      <p class="font-sans text-[17px] leading-relaxed text-secondary">
+        Before any software, every screen was wireframed by hand and reviewed with the people who'd
+        actually use it — agreeing exactly what each one had to answer (<em>are we hitting the
+        plan?</em>) before a line was built. The planners signed off once, and the finished system
+        matched the sketch without a single layout debate.
+      </p>
+    </div>
+  </div>
+
+  <!-- The actual wireframe, embedded -->
+  <figure class="flex flex-col">
+    <div style="border: 0.5px solid #E7E1D6; background: #f7f3ea;">
+      <iframe
+        src="/work/jnj/product-wireframes.html"
+        title="Product Report dashboard — hand-drawn wireframes & design rationale"
+        loading="lazy"
+        class="w-full block"
+        style="height: 70vh; min-height: 480px; border: 0;"
+      ></iframe>
+    </div>
+    <figcaption class="flex items-center justify-between gap-4 mt-3">
+      <span class="font-sans text-[13px]" style="color: #5A6167;">
+        The Product Report wireframe — the same one handed to stakeholders before the build.
+      </span>
+      <a
+        href="/work/jnj/product-wireframes.html"
+        target="_blank"
+        rel="noopener"
+        class="font-sans text-[13px] text-muted-soft hover:text-navy transition-colors whitespace-nowrap"
+      >Open full wireframe →</a>
+    </figcaption>
+  </figure>
+</section>
+
+<!-- 03 · MADE REAL -->
+<section class="bg-cream px-5 md:px-16 py-20" style="border-bottom: 0.5px solid #E7E1D6;">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+    <div class="md:col-span-4">
+      <span class="font-serif text-[52px] text-accent leading-none block mb-4">03</span>
+      <span class="eyebrow text-accent-green block">Made real</span>
+    </div>
+    <div class="md:col-span-8 max-w-2xl">
+      <h2 class="font-serif text-[28px] md:text-[34px] text-navy font-normal leading-snug mb-6">
+        From sketch to a system the team runs on.
+      </h2>
+      <p class="font-sans text-[17px] leading-relaxed text-secondary">
+        In about three weeks the design became a live dashboard <em>(shown above)</em>, backed by an
+        automated model that does the heavy lifting on its own — pulling every team's inputs into one
+        place, recalculating instantly, and reminding each department when it's their turn to update.
+        The math even follows J&J's real fiscal calendar, so the capacity numbers reflect the days
+        the lines actually run.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · THE PAYOFF -->
+<section class="bg-cream px-5 md:px-16 py-20">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
+    <div class="md:col-span-4">
+      <span class="font-serif text-[52px] text-accent leading-none block mb-4">04</span>
+      <span class="eyebrow text-accent-green block">The payoff</span>
+    </div>
+    <div class="md:col-span-8 max-w-2xl">
+      <h2 class="font-serif text-[28px] md:text-[34px] text-navy font-normal leading-snug">
+        One model the whole operation runs on — and leadership trusts.
+      </h2>
+    </div>
+  </div>
+
+  <!-- ROI numbers — copper for positive outcomes -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+    {roi.map((r) => (
+      <div style="border-top: 0.5px solid #A87C52;" class="pt-4">
+        <div class="font-serif text-[30px] md:text-[40px] text-accent font-light leading-none">{r.v}</div>
+        <div class="eyebrow text-accent-green mt-3">{r.l}</div>
+      </div>
+    ))}
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 max-w-5xl">
+    {outcomes.map((o) => (
+      <div>
+        <h3 class="font-serif text-[22px] text-navy mb-2 leading-snug">{o.h}</h3>
+        <p class="font-sans text-[15px] leading-relaxed text-secondary">{o.p}</p>
+      </div>
+    ))}
+  </div>
+</section>

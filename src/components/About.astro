@@ -1,0 +1,57 @@
+---
+const founders = [
+  {
+    name: 'Alvaro Hernandez',
+    role: 'AI & Systems Architect',
+    bio: 'Two decades in enterprise software and AI — architecting systems for healthcare, finance, and manufacturing.',
+    img: '/images/alvaro.jpeg',
+  },
+  {
+    name: 'Sinaí Alfaro',
+    role: 'Design & Product Lead',
+    bio: 'Designer focused on clarity and human-centered products. Leads UI/UX and brand.',
+    img: '/images/sinai.jpeg',
+  },
+];
+---
+
+<section id="about" class="px-5 md:px-16 py-24" style="background-color: #E7E1D6; border-bottom: 0.5px solid #E7E1D6;">
+
+  <!-- Header row -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+    <div>
+      <h2 class="font-serif text-[32px] md:text-[40px] text-navy leading-tight">
+        Built by engineers and designers seeking clarity.
+      </h2>
+    </div>
+    <div class="flex flex-col justify-end">
+      <p class="font-sans text-[17px] leading-relaxed" style="color: rgba(30, 42, 56, 0.8);">
+        HeyView was founded in Costa Rica by Alvaro Hernandez and Sinaí Alfaro. Twenty years building systems for hospitals, multinationals, and enterprise operations. Now applying that same rigor to businesses that deserve it — without the 18-month timeline.
+      </p>
+    </div>
+  </div>
+
+  <!-- Founder cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {founders.map((founder) => (
+      <div
+        class="flex flex-col md:flex-row gap-8 items-center md:items-start p-8"
+        style="background-color: #F5F0E8; border: 0.5px solid rgba(30, 42, 56, 0.1);"
+      >
+        <img
+          src={founder.img}
+          alt={`Portrait of ${founder.name}`}
+          width="128"
+          height="128"
+          class="w-32 h-32 object-cover object-top grayscale hover:grayscale-0 transition-[filter] duration-500 shrink-0"
+        />
+        <div>
+          <h3 class="font-serif text-[22px] text-navy font-medium leading-snug">{founder.name}</h3>
+          <p class="eyebrow mt-1 mb-4" style="color: #526251;">{founder.role}</p>
+          <p class="font-sans text-[13px] text-muted leading-relaxed">{founder.bio}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+</section>
