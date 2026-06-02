@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { SITE, SOCIALS } from '../config';
 import PostHog from '../components/posthog.astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title?: string;
@@ -60,6 +61,7 @@ const websiteSchema = {
     <meta name="theme-color" content="#F5F0E8" />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <ClientRouter />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content={SITE.shortName} />
