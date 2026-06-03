@@ -35,4 +35,4 @@ export const CAL_LINK = 'heyview/discovery';
 export const CAL_NAMESPACE = 'discovery';
 
 /** Cal.com popup config, passed as the data-cal-config attribute. */
-export const CAL_CONFIG = '{"layout":"week_view","useSlotsViewOnSmallScreen":"true","theme":"auto"}';
+export const CAL_CONFIG = '{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"auto"}';
