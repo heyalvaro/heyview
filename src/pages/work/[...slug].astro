@@ -5,14 +5,13 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 import JnjStory from '../../components/work/JnjStory.astro';
+import CaseStudyStory from '../../components/work/CaseStudyStory.astro';
+import { CAL_LINK, CAL_NAMESPACE, CAL_CONFIG } from '../../config';
 
-// Flagship projects can override the generic prose body with a bespoke,
-// fully-designed story component, keyed by slug.
 const customStories: Record<string, any> = {
   'jnj-capacity-model': JnjStory,
 };
 
-// Generate a page for every non-draft, non-confidential project.
 export const getStaticPaths = (async () => {
   const projects = await getCollection(
     'work',
@@ -27,19 +26,27 @@ export const getStaticPaths = (async () => {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const CustomStory = customStories[project.id];
-const { title, summary, tag, cover, client, year, industry, period, stats, gallery } = project.data;
+const { title, summary, tag, cover, client, year, industry, services, period, stats, gallery, context, solution, results } =
+  project.data;
 
 const pageUrl = new URL(`/work/${project.id}`, Astro.site).href;
-const metaRow = [industry, client, period].filter(Boolean).join(' · ');
 
-// Sibling projects for prev/next navigation (sorted by order, then title).
-const allProjects = (await getCollection('work', ({ data }) => !data.draft && !data.confidential))
-  .sort((a, b) => (a.data.order ?? 100) - (b.data.order ?? 100));
+// Split "HEALTHCARE   AI   UX" → ["Healthcare", "AI", "UX"]
+const categories = tag
+  .split(/\s{2,}/)
+  .map((s: string) => s.trim())
+  .filter(Boolean);
+
+const metaServices = services ?? industry;
+
+const allProjects = (
+  await getCollection('work', ({ data }) => !data.draft && !data.confidential)
+).sort((a, b) => (a.data.order ?? 100) - (b.data.order ?? 100));
 const currentIdx = allProjects.findIndex((p) => p.id === project.id);
 const prevProject = currentIdx > 0 ? allProjects[currentIdx - 1] : null;
-const nextProject = currentIdx < allProjects.length - 1 ? allProjects[currentIdx + 1] : null;
+const nextProject =
+  currentIdx < allProjects.length - 1 ? allProjects[currentIdx + 1] : null;
 
-// CreativeWork schema — clean, machine-readable facts for rich results + AI.
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
@@ -57,78 +64,111 @@ const schema = {
 <Layout title={`${title} — HeyView`} description={summary} image={cover} type="article">
   <div class="max-w-360 mx-auto relative shadow-sm">
     <Navbar transition:persist />
+
     <main id="main-content">
-      <article class="bg-navy">
+      <article>
 
-        <!-- ── Hero ──────────────────────────────────────────────────────── -->
-        <div class="grain px-5 md:px-16 pt-24 pb-16">
-          <a
-            href="/work"
-            class="font-sans text-[13px] transition-colors"
-            style="color: rgba(245,240,232,0.45);"
-            onmouseover="this.style.color='rgba(245,240,232,0.8)'"
-            onmouseout="this.style.color='rgba(245,240,232,0.45)'"
-          >← All work</a>
+        <!-- ── Hero (navy) ──────────────────────────────────────────────── -->
+        <section class="grain bg-navy">
+          <div class="px-5 md:px-16 pt-20 pb-16">
 
-          <span class="eyebrow text-accent-green block mt-10 mb-5">{tag}</span>
+            <a
+              href="/work"
+              class="inline-flex items-center gap-2 font-sans text-[12px] font-semibold tracking-widest uppercase transition-colors duration-200"
+              style="color: rgba(245,240,232,0.4);"
+              onmouseover="this.style.color='rgba(245,240,232,0.75)'"
+              onmouseout="this.style.color='rgba(245,240,232,0.4)'"
+            >
+              <span
+                class="material-symbols-outlined"
+                style="font-size:14px; font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20;"
+              >arrow_back</span>
+              All work
+            </a>
 
-          <h1 class="font-serif text-[44px] md:text-[64px] text-cream font-light leading-[1.1] max-w-4xl">
-            {title}
-          </h1>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-12 items-start">
 
-          <p
-            class="font-sans text-[17px] md:text-[20px] leading-relaxed max-w-2xl mt-6"
-            style="color: rgba(245,240,232,0.65);"
-          >
-            {summary}
-          </p>
+              <!-- Left col: categories + headline + summary -->
+              <div class="md:col-span-8">
+                <div class="flex flex-wrap items-center gap-3 mb-8">
+                  {categories.map((cat: string, i: number) => (
+                    <>
+                      {i > 0 && <span style="color: rgba(245,240,232,0.2);">•</span>}
+                      <span class="eyebrow text-accent">{cat}</span>
+                    </>
+                  ))}
+                </div>
 
-          {metaRow && (
-            <p class="font-sans text-[13px] mt-8" style="color: rgba(245,240,232,0.4);">
-              {metaRow}
-            </p>
-          )}
-        </div>
+                <h1 class="font-serif text-[44px] md:text-[64px] text-cream font-light leading-[1.1] max-w-3xl">
+                  {title}
+                </h1>
 
-        <!-- ── Cover image ───────────────────────────────────────────────── -->
+                <p
+                  class="font-sans text-[17px] md:text-[20px] leading-relaxed max-w-2xl mt-6"
+                  style="color: rgba(245,240,232,0.65);"
+                >
+                  {summary}
+                </p>
+              </div>
+
+              <!-- Right col: client / services / year -->
+              {(client || metaServices || year) && (
+                <div
+                  class="md:col-span-4 mt-10 md:mt-0 pt-8 md:pt-16 space-y-8 border-t md:border-t-0 md:border-l md:pl-12"
+                  style="border-color: rgba(245,240,232,0.1);"
+                >
+                  {client && (
+                    <div>
+                      <span class="eyebrow text-accent block mb-2">Client</span>
+                      <span class="font-sans text-[15px] text-cream">{client}</span>
+                    </div>
+                  )}
+                  {metaServices && (
+                    <div>
+                      <span class="eyebrow text-accent block mb-2">Services</span>
+                      <span class="font-sans text-[15px] text-cream">{metaServices}</span>
+                    </div>
+                  )}
+                  {year && (
+                    <div>
+                      <span class="eyebrow text-accent block mb-2">Year</span>
+                      <span class="font-sans text-[15px] text-cream">{year}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Cover image (full-bleed) ────────────────────────────────── -->
         {cover ? (
-          <div
-            role="img"
-            aria-label={title}
-            class="h-80 md:h-128 w-full bg-cover bg-center"
-            style={`background-image: url('${cover}');`}
-          />
+          <section class="w-full h-[55vh] md:h-[80vh] overflow-hidden">
+            <img
+              src={cover}
+              alt={title}
+              class="w-full h-full object-cover"
+              loading="eager"
+            />
+          </section>
         ) : (
           <div
             class="h-56 md:h-80 w-full flex items-center justify-center"
-            style="background-image: linear-gradient(135deg, #2a3848 0%, #1a242f 100%);"
+            style="background: linear-gradient(135deg, #2a3848 0%, #1a242f 100%);"
           >
-            <span class="material-symbols-outlined" style="font-size:88px; color: rgba(245,240,232,0.15);">monitoring</span>
+            <span
+              class="material-symbols-outlined"
+              style="font-size:88px; color: rgba(245,240,232,0.15);"
+            >monitoring</span>
           </div>
         )}
 
-        <!-- ── Stats band ─────────────────────────────────────────────────── -->
-        {stats && stats.length > 0 && (
-          <div class="bg-cream px-5 md:px-16 py-14" style="border-bottom: 0.5px solid #E7E1D6;">
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-0 gap-y-10">
-              {stats.map((stat, i) => (
-                <div
-                  class="pr-8"
-                  style={i > 0 ? 'border-left: 0.5px solid #E7E1D6; padding-left: 2rem;' : ''}
-                >
-                  <div class="font-serif text-[44px] md:text-[52px] text-accent font-light leading-none">
-                    {stat.value}
-                  </div>
-                  <div class="eyebrow text-accent-green mt-3">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <!-- ── Body ──────────────────────────────────────────────────────── -->
+        <!-- ── Body (custom story → structured sections → prose fallback) ── -->
         {CustomStory ? (
           <CustomStory />
+        ) : (context || solution) ? (
+          <CaseStudyStory context={context} solution={solution} />
         ) : (
           <div class="bg-cream px-5 md:px-16 py-16 md:py-24">
             <div class="prose-light font-sans text-[17px] leading-relaxed max-w-2xl">
@@ -137,72 +177,131 @@ const schema = {
           </div>
         )}
 
-        <!-- ── Gallery ───────────────────────────────────────────────────── -->
+        <!-- ── Gallery ─────────────────────────────────────────────────── -->
         {gallery && gallery.length > 0 && (
-          <div class="bg-cream px-5 md:px-16 pb-20" style="border-top: 0.5px solid #E7E1D6;">
-            <div class="pt-14 pb-2">
-              <span class="eyebrow text-accent-green">From the project</span>
+          <section class="py-20 md:py-24" style="background-color: #E7E1D6;">
+            <div class="px-5 md:px-16">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- First image spans full width -->
+                {gallery.slice(0, 1).map((shot: { src: string; caption?: string }) => (
+                  <div class="md:col-span-3 aspect-video overflow-hidden group">
+                    <img
+                      src={shot.src}
+                      alt={shot.caption ?? title}
+                      loading="lazy"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
+                ))}
+                <!-- Remaining images: 1-col squares -->
+                {gallery.slice(1).map((shot: { src: string; caption?: string }) => (
+                  <div class="aspect-square overflow-hidden group bg-navy">
+                    <img
+                      src={shot.src}
+                      alt={shot.caption ?? title}
+                      loading="lazy"
+                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-              {gallery.map((shot) => (
-                <figure class="flex flex-col">
-                  <img
-                    src={shot.src}
-                    alt={shot.caption ?? title}
-                    loading="lazy"
-                    class="w-full h-auto"
-                    style="border: 0.5px solid #E7E1D6;"
-                  />
-                  {shot.caption && (
-                    <figcaption
-                      class="font-sans text-[13px] mt-3"
-                      style="color: #5A6167;"
+          </section>
+        )}
+
+        <!-- ── Stats / Results ──────────────────────────────────────────── -->
+        {stats && stats.length > 0 && (
+          <section class="bg-navy py-24 md:py-32">
+            <div class="px-5 md:px-16 grid grid-cols-1 md:grid-cols-12 gap-6">
+              <div class="md:col-span-5">
+                <h2 class="font-serif text-[40px] text-cream font-normal leading-tight mb-6">
+                  The Results
+                </h2>
+                <p
+                  class="font-sans text-[17px] leading-relaxed"
+                  style="color: rgba(245,240,232,0.65);"
+                >
+                  {results?.intro ?? 'Measurable outcomes from the engagement.'}
+                </p>
+              </div>
+
+              <div class="md:col-span-6 md:col-start-7 mt-12 md:mt-0 grid grid-cols-2 gap-x-10 gap-y-14">
+                {stats.map((stat: { value: string; label: string }) => (
+                  <div
+                    class="py-4 pl-8"
+                    style="border-left: 0.5px solid rgba(168,124,82,0.55);"
+                  >
+                    <span class="font-serif text-[52px] md:text-[64px] block text-accent leading-none mb-3">
+                      {stat.value}
+                    </span>
+                    <span
+                      class="eyebrow uppercase tracking-widest"
+                      style="color: rgba(245,240,232,0.6);"
                     >
-                      {shot.caption}
-                    </figcaption>
-                  )}
-                </figure>
-              ))}
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          </section>
         )}
 
       </article>
+
+      <!-- ── Prev / Next ────────────────────────────────────────────────── -->
+      {(prevProject || nextProject) && (
+        <nav
+          class="bg-navy grid"
+          style={`grid-template-columns: ${prevProject && nextProject ? '1fr 1fr' : '1fr'}; border-top: 0.5px solid rgba(245,240,232,0.1);`}
+        >
+          {prevProject && (
+            <a
+              href={`/work/${prevProject.id}`}
+              class="group py-14 px-8 md:px-16 flex flex-col gap-3"
+              style={nextProject ? 'border-right: 0.5px solid rgba(245,240,232,0.1);' : ''}
+            >
+              <span
+                class="eyebrow flex items-center gap-2"
+                style="color: rgba(245,240,232,0.45);"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-size:14px; font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20;"
+                >arrow_back</span>
+                Previous Project
+              </span>
+              <span class="font-serif text-[22px] md:text-[26px] text-cream leading-tight group-hover:text-accent transition-colors duration-200">
+                {prevProject.data.title}
+              </span>
+            </a>
+          )}
+          {nextProject && (
+            <a
+              href={`/work/${nextProject.id}`}
+              class="group py-14 px-8 md:px-16 flex flex-col gap-3 items-end text-right"
+            >
+              <span
+                class="eyebrow flex items-center gap-2"
+                style="color: rgba(245,240,232,0.45);"
+              >
+                Next Project
+                <span
+                  class="material-symbols-outlined"
+                  style="font-size:14px; font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20;"
+                >arrow_forward</span>
+              </span>
+              <span class="font-serif text-[22px] md:text-[26px] text-cream leading-tight group-hover:text-accent transition-colors duration-200">
+                {nextProject.data.title}
+              </span>
+            </a>
+          )}
+        </nav>
+      )}
+
     </main>
 
     <Footer />
-
-    <!-- ── Prev / Next navigation ─────────────────────────────────────────── -->
-    {(prevProject || nextProject) && (
-      <nav
-        class="bg-cream grid"
-        style={`grid-template-columns: ${prevProject && nextProject ? '1fr 1fr' : '1fr'}; border-top: 0.5px solid #E7E1D6;`}
-      >
-        {prevProject && (
-          <a href={`/work/${prevProject.id}`} class="group px-8 md:px-16 py-10 flex flex-col gap-2">
-            <span class="eyebrow text-accent-green">← Previous</span>
-            <span class="font-serif text-[22px] md:text-[26px] text-navy leading-tight group-hover:opacity-60 transition-opacity">
-              {prevProject.data.title}
-            </span>
-            <span class="eyebrow" style="color: #A87C52; font-size: 10px;">{prevProject.data.tag}</span>
-          </a>
-        )}
-        {nextProject && (
-          <a
-            href={`/work/${nextProject.id}`}
-            class="group px-8 md:px-16 py-10 flex flex-col gap-2 items-end text-right"
-            style={prevProject ? 'border-left: 0.5px solid #E7E1D6;' : ''}
-          >
-            <span class="eyebrow text-accent-green">Next →</span>
-            <span class="font-serif text-[22px] md:text-[26px] text-navy leading-tight group-hover:opacity-60 transition-opacity">
-              {nextProject.data.title}
-            </span>
-            <span class="eyebrow" style="color: #A87C52; font-size: 10px;">{nextProject.data.tag}</span>
-          </a>
-        )}
-      </nav>
-    )}
-
   </div>
 
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />

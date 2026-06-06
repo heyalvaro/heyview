@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
-import WorkCard from '../../components/WorkCard.astro';
+import { CAL_LINK, CAL_NAMESPACE, CAL_CONFIG } from '../../config';
 
 const projects = (await getCollection('work', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
@@ -11,6 +11,14 @@ const projects = (await getCollection('work', ({ data }) => !data.draft)).sort(
 
 const featured = projects.find((p) => p.data.featured) ?? projects[0];
 const rest = projects.filter((p) => p.id !== featured?.id);
+
+// Split "FINANCE   PROCESS AUTOMATION" → ["Finance", "Process Automation"]
+function splitTag(tag: string): [string, string] {
+  const parts = tag.split(/\s{2,}/);
+  const fmt = (s: string) =>
+    s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+  return parts.length >= 2 ? [fmt(parts[0]), fmt(parts[1])] : [fmt(parts[0]), ''];
+}
 ---
 
 <Layout
@@ -19,25 +27,294 @@ const rest = projects.filter((p) => p.id !== featured?.id);
 >
   <div class="max-w-360 mx-auto relative shadow-sm">
     <Navbar transition:persist />
-    <main id="main-content">
-      <section class="bg-navy px-5 md:px-16 py-24">
 
-        <span class="eyebrow text-accent-green block mb-6">Selected Work</span>
-        <h1 class="font-serif text-[40px] md:text-[56px] text-cream font-normal mb-4">The work.</h1>
-        <p class="font-sans text-[17px] leading-relaxed max-w-2xl mb-16" style="color: rgba(245, 240, 232, 0.7);">
-          A selection of projects across design, automation, and AI. Some engagements are
-          confidential — reach out and we'll walk you through the details.
+    <main id="main-content">
+
+      <!-- ── Hero ── -->
+      <section class="grain bg-navy px-5 md:px-16 pt-20 pb-14">
+        <span class="eyebrow text-accent block mb-5">Selected Work</span>
+        <h1 class="font-serif text-[48px] md:text-[64px] text-cream font-light leading-tight mb-5">
+          The work.
+        </h1>
+        <p class="font-sans text-[17px] leading-relaxed max-w-2xl" style="color: rgba(245,240,232,0.65);">
+          A growing record of systems and design built for practices that mean business.
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-          {featured && <WorkCard project={featured} variant="featured" class="col-span-1 md:col-span-12" />}
-          {rest.map((project) => (
-            <WorkCard project={project} variant="compact" class="col-span-1 md:col-span-6" />
+        <!-- Filter pills -->
+        <nav aria-label="Filter projects by category" class="flex flex-wrap gap-3 mt-12">
+          {(['All', 'Web', 'Branding', 'AI Systems', 'Dashboard'] as const).map((label, i) => (
+            <button
+              data-filter={label.toLowerCase()}
+              class:list={['filter-btn', i === 0 && 'is-active']}
+            >
+              {label}
+            </button>
           ))}
-        </div>
-
+        </nav>
       </section>
+
+      <!-- ── Featured Project ── -->
+      {featured && (() => {
+        const { title, summary, tag, cover, confidential } = featured.data;
+        const href = confidential ? '#contact' : `/work/${featured.id}`;
+        return (
+          <section data-filter-card data-tags={tag.toLowerCase()} class="px-5 md:px-16 py-20 flex flex-col md:flex-row gap-12 md:gap-16 items-center bg-cream">
+
+            <!-- Image -->
+            <div class="w-full md:w-[60%] aspect-[16/10] overflow-hidden flex-shrink-0"
+              style="background-color: #E7E1D6;">
+              {cover ? (
+                <img
+                  src={cover}
+                  alt={title}
+                  class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                  loading="eager"
+                />
+              ) : (
+                <div class="w-full h-full flex items-center justify-center"
+                  style="background: linear-gradient(135deg, #ddd7cd 0%, #ccc6bc 100%);">
+                  <span class="eyebrow text-navy/25">[Project preview]</span>
+                </div>
+              )}
+            </div>
+
+            <!-- Text -->
+            <div class="w-full md:w-[40%] flex flex-col gap-5">
+              <span class="eyebrow text-accent">Featured Project</span>
+              <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal leading-tight">
+                {title}
+              </h2>
+              <p class="font-sans text-[17px] leading-relaxed text-muted">
+                {summary}
+              </p>
+              <div class="pt-4">
+                <a
+                  href={href}
+                  class="group inline-flex items-center gap-2 font-sans text-[13px] font-semibold tracking-widest uppercase text-navy hover:text-accent transition-colors duration-200"
+                >
+                  <span class="underline-offset-4 group-hover:underline">
+                    {confidential ? 'Request case study' : 'View case study'}
+                  </span>
+                  <span
+                    class="material-symbols-outlined translate-x-0 group-hover:translate-x-1.5 transition-transform duration-300"
+                    style="font-size: 17px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;"
+                  >arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+          </section>
+        );
+      })()}
+
+      <!-- hairline -->
+      <div data-featured-divider style="height: 0.5px; background-color: #E7E1D6; margin: 0 4rem;" class="hidden md:block" />
+
+      <!-- ── Project Grid ── -->
+      <section class="px-5 md:px-16 py-20 bg-cream">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-20">
+
+          {rest.map((project) => {
+            const { title, summary, tag, cover, confidential } = project.data;
+            const href = confidential ? '#contact' : `/work/${project.id}`;
+            const [cat1, cat2] = splitTag(tag);
+            return (
+              <article data-filter-card data-tags={tag.toLowerCase()} class="flex flex-col gap-6">
+                <a href={href} class="block overflow-hidden aspect-[4/3] group" style="background-color: #E7E1D6;">
+                  {cover ? (
+                    <img
+                      src={cover}
+                      alt={title}
+                      class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center"
+                      style="background: linear-gradient(135deg, #ddd7cd 0%, #ccc6bc 100%);">
+                      <span class="eyebrow text-navy/25">[Project preview]</span>
+                    </div>
+                  )}
+                </a>
+
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-center gap-3">
+                    <span class="eyebrow text-accent">{cat1}</span>
+                    {cat2 && (
+                      <>
+                        <span class="w-1 h-1 rounded-full bg-navy/20" />
+                        <span class="eyebrow text-accent">{cat2}</span>
+                      </>
+                    )}
+                  </div>
+                  <h3 class="font-serif text-[22px] text-navy font-medium leading-snug">
+                    {confidential
+                      ? <span>{title}</span>
+                      : <a href={href} class="hover:opacity-70 transition-opacity">{title}</a>
+                    }
+                  </h3>
+                  <p class="font-sans text-[15px] leading-relaxed text-muted max-w-sm">
+                    {summary}
+                  </p>
+                  <div class="pt-2">
+                    <a
+                      href={href}
+                      class="group inline-flex items-center gap-2 font-sans text-[12px] font-semibold tracking-widest uppercase text-navy hover:text-accent transition-colors duration-200"
+                    >
+                      <span class="underline-offset-4 group-hover:underline">
+                        {confidential ? 'Request case study' : 'View case study'}
+                      </span>
+                      <span
+                        class="material-symbols-outlined translate-x-0 group-hover:translate-x-1.5 transition-transform duration-300"
+                        style="font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;"
+                      >arrow_forward</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+
+          <!-- In-Progress placeholder -->
+          <article data-filter-card data-placeholder class="flex flex-col gap-6">
+            <div class="relative aspect-[4/3] overflow-hidden" style="background-color: #E7E1D6;">
+              <div class="w-full h-full flex items-center justify-center"
+                style="background: linear-gradient(135deg, #ddd7cd 0%, #ccc6bc 100%);">
+                <span class="eyebrow text-navy/25">[Project preview]</span>
+              </div>
+              <div class="absolute top-4 right-4 px-3 py-1" style="border: 0.5px solid #A87C52;">
+                <span class="eyebrow text-accent">In progress</span>
+              </div>
+            </div>
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center gap-3">
+                <span class="eyebrow text-muted/50">Healthcare</span>
+                <span class="w-1 h-1 rounded-full bg-navy/20" />
+                <span class="eyebrow text-muted/50">AI Systems</span>
+              </div>
+              <h3 class="font-serif text-[22px] text-navy font-medium leading-snug">
+                Specialty medical practice
+              </h3>
+              <p class="font-sans text-[15px] leading-relaxed text-muted max-w-sm">
+                AI operations system — currently in delivery for a specialty practice.
+              </p>
+            </div>
+          </article>
+
+          <!-- Coming Soon placeholder -->
+          <article
+            data-filter-card data-placeholder
+            class="flex flex-col items-center justify-center text-center gap-4 p-12 min-h-80"
+            style="background-color: #E7E1D6; border: 0.5px solid rgba(30,42,56,0.12);"
+          >
+            <span class="eyebrow text-muted/40">04 / Project Pending</span>
+            <h3 class="font-serif text-[22px] font-medium" style="color: rgba(30,42,56,0.5);">
+              Coming soon
+            </h3>
+            <p class="font-sans text-[13px] italic" style="color: rgba(30,42,56,0.35);">
+              New enterprise platform reveal scheduled for Q4 2025.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ── CTA ── -->
+      <section class="grain bg-navy px-5 md:px-16 py-24 flex flex-col items-center text-center gap-10">
+        <h2 class="font-serif font-light text-cream leading-tight md:whitespace-nowrap"
+          style="font-size: clamp(1.75rem, 3.5vw, 2.75rem); letter-spacing: -0.01em;">
+          Ready to build your next flagship product?
+        </h2>
+        <button
+          data-cal-link={CAL_LINK}
+          data-cal-namespace={CAL_NAMESPACE}
+          data-cal-config={CAL_CONFIG}
+          class="font-sans text-[12px] font-semibold tracking-widest uppercase text-cream cursor-pointer hover:bg-cream hover:text-navy transition-colors duration-300 px-8 py-4"
+          style="border: 0.5px solid rgba(245,240,232,0.5);"
+        >
+          Start a conversation
+        </button>
+      </section>
+
     </main>
+
     <Footer />
   </div>
+<style>
+  .filter-btn {
+    padding: 0.5rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 0.5px solid rgba(245, 240, 232, 0.12);
+    color: rgba(245, 240, 232, 0.4);
+    background: transparent;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .filter-btn:hover {
+    color: rgba(245, 240, 232, 0.75);
+    border-color: rgba(245, 240, 232, 0.3);
+  }
+  .filter-btn.is-active {
+    background-color: rgba(245, 240, 232, 0.12);
+    color: rgba(245, 240, 232, 1);
+    border-color: rgba(245, 240, 232, 0.25);
+  }
+  [data-filter-card][hidden] {
+    display: none !important;
+  }
+</style>
+
+<script>
+  const KEYWORDS: Record<string, string[]> = {
+    'all':        [],
+    'web':        ['web'],
+    'branding':   ['brand'],
+    'ai systems': ['ai', 'automation'],
+    'dashboard':  ['dashboard', 'platform'],
+  };
+
+  function matchesFilter(tags: string, filter: string): boolean {
+    if (filter === 'all') return true;
+    const keywords = KEYWORDS[filter] ?? [filter];
+    return keywords.some((kw) => tags.includes(kw));
+  }
+
+  const buttons  = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards    = document.querySelectorAll<HTMLElement>('[data-filter-card]');
+  const divider  = document.querySelector<HTMLElement>('[data-featured-divider]');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter ?? 'all';
+
+      // Update active button
+      buttons.forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+
+      // Show / hide each card
+      cards.forEach((card) => {
+        if (filter === 'all') {
+          card.hidden = false;
+          return;
+        }
+        // Placeholders always hide when a specific filter is active
+        if ('placeholder' in card.dataset) {
+          card.hidden = true;
+          return;
+        }
+        const tags = card.dataset.tags ?? '';
+        card.hidden = !matchesFilter(tags, filter);
+      });
+
+      // Hide the featured↔grid divider when the featured card is hidden
+      if (divider) {
+        const featuredCard = document.querySelector<HTMLElement>('[data-filter-card][data-tags]');
+        divider.hidden = !!(featuredCard && featuredCard.hidden);
+      }
+    });
+  });
+</script>
 </Layout>

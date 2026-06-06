@@ -5,6 +5,7 @@ summary: A multi-site capacity planning system for Johnson & Johnson MedTech —
 cover: /work/jnj-capacity-model-cover.png
 client: Johnson & Johnson MedTech (Shockwave Medical)
 industry: Medical Devices · Manufacturing Operations
+services: Capacity Planning, Power Platform, UX Design
 period: May – Nov 2025
 year: 2025
 order: 2

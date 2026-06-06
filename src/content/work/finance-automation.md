@@ -5,10 +5,44 @@ summary: A multinational manufacturer was spending 80+ hours per month on a fina
 cover: https://lh3.googleusercontent.com/aida-public/AB6AXuAt55U6WS3wbUogzumHKQGL4RwVkbPhaeyVAcMcv6mdLjIc08bD9m4gyeBluY_FKDmReJAjaOjaj0BPY22zQvzQm2gVZor8NqmedjElDeBLuJrZGdmln0moTNeWAxcebY2Q6tNebdWkTP0zSM5ZjH6wASXViBnXoaJygcH70sin5HK_LnkVz8q9jbgUwqDi_hnW7qU-rM2xEWwbgLYVFsTCY-mgL7yLZchkm4C1FuGXzxI-IOTa1HmKsjNCw-6O4G8FRUJkTrOGmg
 client: Confidential — multinational manufacturer
 industry: Manufacturing · Finance Operations
+services: Process Automation, Systems Design
 period: Jan – Apr 2025
 year: 2025
 order: 3
 featured: false
+context:
+  body: >
+    A multinational manufacturer was closing the books by hand every month —
+    pulling numbers from four systems, reconciling them in Excel, formatting
+    reports, and emailing PDFs to regional leadership. By the time we were
+    brought in, month-end close consumed three full-time people for nearly two
+    weeks, errors were routine, and leadership was reading numbers that were
+    already a week old by the time they arrived.
+solution:
+  intro: >
+    We built three automated layers that eliminated the manual steps entirely,
+    without changing how the finance team thinks about the work.
+  features:
+    - title: "Automated data collection"
+      body: >
+        Scheduled connectors pull source data from ERP, billing, payroll, and
+        the regional consolidation tool nightly — normalize it, and land it in
+        one model. No human touches the extraction step anymore.
+    - title: "Reconciliation engine"
+      body: >
+        Discrepancies are now flagged automatically with a plain-language
+        explanation and a direct link to the source record. The team reviews
+        exceptions, not rows.
+    - title: "Leadership reporting"
+      body: >
+        The final close report generates automatically on Day 1 of each month —
+        formatted, versioned, and distributed. Regional leads get a live
+        dashboard instead of a static PDF.
+results:
+  intro: >
+    The first close after go-live ran in six hours. Three people who had spent
+    half their working lives on data plumbing were redeployed to FP&A work.
+    The system has been running for five months without intervention.
 stats:
   - { value: "80 hrs", label: "Monthly close, before" }
   - { value: "→ 6 hrs", label: "Monthly close, after" }
