@@ -1,0 +1,122 @@
+---
+// Tab component for showing Design Brief, Wireframes, and Final System
+// Used in JnJ case study and other bespoke narratives
+
+interface Props {
+  wireframeUrl?: string;
+  wireframeCaption?: string;
+}
+
+const { wireframeUrl, wireframeCaption } = Astro.props;
+---
+
+<section class="bg-surface px-5 md:px-16 py-20 md:py-24" style="border-bottom: 0.5px solid #E7E1D6;">
+  <!-- Tab Navigation -->
+  <div class="max-w-360 mx-auto mb-12">
+    <div class="flex gap-8 border-b" style="border-color: #E7E1D6;">
+      <button
+        class="design-tab group py-4 px-1 font-sans text-[14px] font-semibold uppercase tracking-widest transition-all duration-200"
+        data-tab="brief"
+        style="color: #5A6167; border-bottom: 2px solid transparent;"
+      >
+        <span class="group-data-[active='true']:text-accent group-data-[active='true']:border-b-2 group-data-[active='true']:border-accent">Design Brief</span>
+      </button>
+      <button
+        class="design-tab group py-4 px-1 font-sans text-[14px] font-semibold uppercase tracking-widest transition-all duration-200"
+        data-tab="wireframes"
+        style="color: #5A6167;"
+      >
+        <span class="group-data-[active='true']:text-accent group-data-[active='true']:border-b-2 group-data-[active='true']:border-accent">Wireframes</span>
+      </button>
+      <button
+        class="design-tab group py-4 px-1 font-sans text-[14px] font-semibold uppercase tracking-widest transition-all duration-200"
+        data-tab="final"
+        style="color: #5A6167;"
+      >
+        <span class="group-data-[active='true']:text-accent group-data-[active='true']:border-b-2 group-data-[active='true']:border-accent">Final System</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="max-w-360 mx-auto">
+    <!-- Brief Tab -->
+    <div class="design-tab-content" data-tab="brief" style="display: none;">
+      <slot name="brief" />
+    </div>
+
+    <!-- Wireframes Tab -->
+    {wireframeUrl && (
+      <div class="design-tab-content" data-tab="wireframes" style="display: none;">
+        <div style="border: 0.5px solid #E7E1D6; background: #f7f3ea;">
+          <iframe
+            src={wireframeUrl}
+            title="Product wireframes"
+            loading="lazy"
+            class="w-full block"
+            style="height: 70vh; min-height: 480px; border: 0;"
+          ></iframe>
+        </div>
+        {wireframeCaption && (
+          <figcaption class="flex items-center justify-between gap-4 mt-3">
+            <span class="font-sans text-[13px]" style="color: #5A6167;">
+              {wireframeCaption}
+            </span>
+            <a
+              href={wireframeUrl}
+              target="_blank"
+              rel="noopener"
+              class="font-sans text-[13px] text-secondary hover:text-primary transition-colors whitespace-nowrap"
+            >Open full wireframe →</a>
+          </figcaption>
+        )}
+      </div>
+    )}
+
+    <!-- Final Tab -->
+    <div class="design-tab-content" data-tab="final" style="display: none;">
+      <slot name="final" />
+    </div>
+  </div>
+</section>
+
+<script>
+  // Tab switcher logic
+  document.querySelectorAll('.design-tab').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const tabName = btn.getAttribute('data-tab');
+
+      // Hide all tabs
+      document.querySelectorAll('.design-tab-content').forEach((tab) => {
+        (tab as HTMLElement).style.display = 'none';
+      });
+
+      // Show selected tab
+      const activeTab = document.querySelector(`[data-tab="${tabName}"].design-tab-content`);
+      if (activeTab) {
+        (activeTab as HTMLElement).style.display = 'block';
+      }
+
+      // Update button states
+      document.querySelectorAll('.design-tab').forEach((b) => {
+        b.setAttribute('data-active', b === btn ? 'true' : 'false');
+      });
+      btn.setAttribute('data-active', 'true');
+    });
+  });
+
+  // Show first tab by default
+  setTimeout(() => {
+    const firstBtn = document.querySelector('.design-tab') as HTMLElement;
+    if (firstBtn) {
+      firstBtn.click();
+    }
+  }, 0);
+</script>
+
+<style>
+  [data-active="true"] {
+    color: #A87C52 !important;
+    border-bottom-color: #A87C52 !important;
+  }
+</style>

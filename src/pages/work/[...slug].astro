@@ -6,6 +6,7 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 import JnjStory from '../../components/work/JnjStory.astro';
 import CaseStudyStory from '../../components/work/CaseStudyStory.astro';
+import Gallery from '../../components/Gallery.astro';
 import { CAL_LINK, CAL_NAMESPACE, CAL_CONFIG } from '../../config';
 
 const customStories: Record<string, any> = {
@@ -26,7 +27,7 @@ export const getStaticPaths = (async () => {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const CustomStory = customStories[project.id];
-const { title, summary, tag, cover, client, year, industry, services, period, stats, gallery, context, solution, results } =
+const { title, summary, tag, cover, client, year, industry, services, period, team, tools, stats, gallery, context, solution, results } =
   project.data;
 
 const pageUrl = new URL(`/work/${project.id}`, Astro.site).href;
@@ -111,8 +112,8 @@ const schema = {
                 </p>
               </div>
 
-              <!-- Right col: client / services / year -->
-              {(client || metaServices || year) && (
+              <!-- Right col: metadata grid (Client, Services, Year hidden for internal use) -->
+              {(client || metaServices) && (
                 <div
                   class="md:col-span-4 mt-10 md:mt-0 pt-8 md:pt-16 space-y-8 border-t md:border-t-0 md:border-l md:pl-12"
                   style="border-color: rgba(245,240,232,0.1);"
@@ -129,14 +130,11 @@ const schema = {
                       <span class="font-sans text-[15px] text-cream">{metaServices}</span>
                     </div>
                   )}
-                  {year && (
-                    <div>
-                      <span class="eyebrow text-accent block mb-2">Year</span>
-                      <span class="font-sans text-[15px] text-cream">{year}</span>
-                    </div>
-                  )}
                 </div>
               )}
+
+              <!-- Year kept in metadata for SEO/schema, hidden from view for now -->
+              {year && <meta property="datePublished" content={String(year)} />}
 
             </div>
           </div>
@@ -150,6 +148,7 @@ const schema = {
               alt={title}
               class="w-full h-full object-cover"
               loading="eager"
+              transition:name={`cover-${project.id}`}
             />
           </section>
         ) : (
@@ -177,36 +176,9 @@ const schema = {
           </div>
         )}
 
-        <!-- ── Gallery ─────────────────────────────────────────────────── -->
+        <!-- ── Gallery with Lightbox ──────────────────────────────────── -->
         {gallery && gallery.length > 0 && (
-          <section class="py-20 md:py-24" style="background-color: #E7E1D6;">
-            <div class="px-5 md:px-16">
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- First image spans full width -->
-                {gallery.slice(0, 1).map((shot: { src: string; caption?: string }) => (
-                  <div class="md:col-span-3 aspect-video overflow-hidden group">
-                    <img
-                      src={shot.src}
-                      alt={shot.caption ?? title}
-                      loading="lazy"
-                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                ))}
-                <!-- Remaining images: 1-col squares -->
-                {gallery.slice(1).map((shot: { src: string; caption?: string }) => (
-                  <div class="aspect-square overflow-hidden group bg-navy">
-                    <img
-                      src={shot.src}
-                      alt={shot.caption ?? title}
-                      loading="lazy"
-                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+          <Gallery images={gallery} />
         )}
 
         <!-- ── Stats / Results ──────────────────────────────────────────── -->
@@ -226,22 +198,35 @@ const schema = {
               </div>
 
               <div class="md:col-span-6 md:col-start-7 mt-12 md:mt-0 grid grid-cols-2 gap-x-10 gap-y-14">
-                {stats.map((stat: { value: string; label: string }) => (
-                  <div
-                    class="py-4 pl-8"
-                    style="border-left: 0.5px solid rgba(168,124,82,0.55);"
-                  >
-                    <span class="font-serif text-[52px] md:text-[64px] block text-accent leading-none mb-3">
-                      {stat.value}
-                    </span>
-                    <span
-                      class="eyebrow uppercase tracking-widest"
-                      style="color: rgba(245,240,232,0.6);"
+                {stats.map((stat: { value: string; label: string }) => {
+                  const numMatch = stat.value.match(/\d+(?:\.\d+)?/);
+                  const numValue = numMatch ? parseFloat(numMatch[0]) : 0;
+                  const suffix = stat.value.replace(numMatch ? numMatch[0] : '', '');
+                  const isDecimal = numValue !== Math.floor(numValue);
+
+                  return (
+                    <div
+                      class="py-4 pl-8"
+                      style="border-left: 0.5px solid rgba(168,124,82,0.55);"
                     >
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
+                      <span
+                        class="font-serif text-[52px] md:text-[64px] block text-accent leading-none mb-3 select-none"
+                        data-count={Math.floor(numValue)}
+                        data-suffix={suffix}
+                        data-decimal={isDecimal ? '1' : '0'}
+                        style="cursor: default;"
+                      >
+                        {stat.value}
+                      </span>
+                      <span
+                        class="eyebrow uppercase tracking-widest"
+                        style="color: rgba(245,240,232,0.6);"
+                      >
+                        {stat.label}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </section>
@@ -303,6 +288,33 @@ const schema = {
 
     <Footer />
   </div>
+
+  <script is:inline>
+    const statCounters = document.querySelectorAll('[data-count][data-suffix]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.dataset.count ?? '0', 10);
+        const suffix = el.dataset.suffix ?? '';
+        const isDecimal = el.dataset.decimal === '1';
+        const duration = 1200;
+        const start = performance.now();
+        const tick = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const current = ease * target;
+          const formatted = isDecimal ? current.toFixed(1) : Math.round(current).toString();
+          el.textContent = formatted + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.4 });
+
+    statCounters.forEach(el => observer.observe(el));
+  </script>
 
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
 </Layout>

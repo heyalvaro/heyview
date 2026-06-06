@@ -19,19 +19,24 @@ const featured = variant === 'featured';
 ---
 
 <article
-  class:list={['group flex flex-col', className]}
+  class:list={['group relative flex flex-col', className]}
   style="background-color: #243040; border-top: 0.5px solid rgba(140, 154, 139, 0.5);"
 >
+  <a href={href} class="absolute inset-0 z-10" aria-label={title}></a>
   {cover ? (
     <div
-      role="img"
-      aria-label={title}
       class:list={[
-        'w-full bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-500',
+        'w-full overflow-hidden',
         featured ? 'h-90 md:h-105' : 'min-h-45 flex-1',
       ]}
-      style={`background-image: url('${cover}');`}
-    />
+    >
+      <img
+        src={cover}
+        alt={title}
+        class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+        transition:name={`cover-${project.id}`}
+      />
+    </div>
   ) : (
     <div
       role="img"
@@ -57,16 +62,15 @@ const featured = variant === 'featured';
           featured ? 'text-[30px] md:text-[38px]' : 'text-[20px] font-medium leading-snug',
         ]}
       >
-        {hasPage ? <a href={href} class="hover:opacity-80 transition-opacity">{title}</a> : title}
+        {title}
       </h3>
       <p
         class="font-sans text-[13px] leading-relaxed"
         style={`color: rgba(245, 240, 232, ${featured ? '0.8' : '0.7'});`}
       >{summary}</p>
-      <a
-        href={href}
-        class="font-sans text-[13px] text-muted-soft mt-2 w-fit hover:text-cream transition-colors"
-      >{cta}</a>
+      <span
+        class="font-sans text-[13px] text-muted-soft mt-2 w-fit group-hover:text-cream transition-colors relative z-20"
+      >{cta}</span>
     </div>
   </div>
 </article>

@@ -13,15 +13,15 @@ const { context, solution } = Astro.props;
 ---
 
 {context && (
-  <section class="bg-cream px-5 md:px-16 py-20 md:py-28" style="border-top: 0.5px solid #E7E1D6; border-bottom: 0.5px solid #E7E1D6;">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+  <section class="bg-surface text-primary" style="border-top: 0.5px solid #E7E1D6; border-bottom: 0.5px solid #E7E1D6;">
+    <div class="max-w-360 mx-auto px-5 md:px-16 py-20 md:py-28 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10">
       <div class="md:col-span-4">
-        <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal leading-tight">
+        <h2 class="font-serif text-[32px] md:text-[40px] text-primary font-normal leading-tight">
           The Context
         </h2>
       </div>
-      <div class="md:col-span-8">
-        <p class="font-sans text-[17px] leading-relaxed text-secondary max-w-2xl">
+      <div class="md:col-span-7 md:col-start-6">
+        <p class="font-sans text-[17px] md:text-[20px] leading-relaxed text-secondary max-w-2xl">
           {context.body}
         </p>
       </div>
@@ -30,35 +30,33 @@ const { context, solution } = Astro.props;
 )}
 
 {solution && (
-  <section class="bg-navy px-5 md:px-16 py-20 md:py-28">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+  <section class="bg-navy" style="color: #F5F0E8;">
+    <div class="max-w-360 mx-auto px-5 md:px-16 py-20 md:py-28 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10">
 
       <!-- Left: heading + intro -->
       <div class="md:col-span-5">
         <h2 class="font-serif text-[32px] md:text-[40px] text-cream font-normal leading-tight mb-6">
           The Solution
         </h2>
-        <p class="font-sans text-[17px] leading-relaxed" style="color: rgba(245,240,232,0.65);">
+        <p class="font-sans text-[17px] md:text-[20px] leading-relaxed" style="color: rgba(245,240,232,0.65);">
           {solution.intro}
         </p>
       </div>
 
-      <!-- Right: feature list -->
-      <div class="md:col-span-6 md:col-start-7 flex flex-col gap-8 mt-4 md:mt-2">
-        {solution.features.map((feature) => (
-          <div class="flex gap-4 items-start">
-            <span
-              class="mt-[7px] flex-shrink-0 w-1.5 h-1.5 rounded-full"
-              style="background-color: #A87C52;"
-            />
-            <div>
-              <h3 class="font-sans text-[15px] font-semibold text-cream mb-1 leading-snug">
-                {feature.title}
-              </h3>
-              <p class="font-sans text-[15px] leading-relaxed" style="color: rgba(245,240,232,0.6);">
-                {feature.body}
-              </p>
-            </div>
+      <!-- Right: feature list with dots and connectors -->
+      <div class="md:col-span-6 md:col-start-7 space-y-12">
+        {solution.features.map((feature, idx) => (
+          <div class="group relative pl-12">
+            <div class="absolute left-0 top-2 w-4 h-4 rounded-full" style="background-color: #A67C52;"></div>
+            {idx < solution.features.length - 1 && (
+              <div class="absolute left-2 top-6 w-[0.5px] h-full" style="background-color: rgba(245,240,232,0.1);"></div>
+            )}
+            <h3 class="font-serif text-[22px] text-cream mb-3 font-normal leading-snug">
+              {feature.title}
+            </h3>
+            <p class="font-sans text-[15px] leading-relaxed" style="color: rgba(245,240,232,0.65);">
+              {feature.body}
+            </p>
           </div>
         ))}
       </div>

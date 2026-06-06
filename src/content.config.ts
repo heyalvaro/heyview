@@ -44,6 +44,10 @@ const work = defineCollection({
       features: z.array(z.object({ title: z.string(), body: z.string() })),
     }).optional(),
     results: z.object({ intro: z.string() }).optional(),
+    /** Team members or roles, e.g. "Design Lead, Frontend, PM". */
+    team: z.string().optional(),
+    /** Tools used, e.g. "Figma, React, Power Platform". */
+    tools: z.string().optional(),
     /** Lower numbers sort first. */
     order: z.number().default(100),
     draft: z.boolean().default(false),

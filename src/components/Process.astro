@@ -53,7 +53,12 @@ const steps = [
 
           <!-- Step content -->
           <div class="pt-0 md:pt-10 flex-1">
-            <span class="font-serif text-[52px] text-accent leading-none font-normal block mb-3">
+            <span
+              class="font-serif text-[52px] text-accent leading-none font-normal block mb-3 select-none transition-colors duration-300 group hover:text-accent/80"
+              data-count={parseInt(step.number)}
+              data-suffix=""
+              style="cursor: default;"
+            >
               {step.number}
             </span>
             <span class="eyebrow text-navy/60 block mb-3">{step.week}</span>
@@ -75,5 +80,30 @@ const steps = [
       Book a discovery call
     </button>
   </div>
+
+  <script is:inline>
+    const counters = document.querySelectorAll('[data-count]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.dataset.count ?? '0', 10);
+        const suffix = el.dataset.suffix ?? '';
+        const duration = 1200;
+        const start = performance.now();
+        const tick = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const padded = String(Math.round(ease * target)).padStart(2, '0');
+          el.textContent = padded + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.4 });
+
+    counters.forEach(el => observer.observe(el));
+  </script>
 
 </section>

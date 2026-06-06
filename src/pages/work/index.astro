@@ -58,10 +58,11 @@ function splitTag(tag: string): [string, string] {
         const { title, summary, tag, cover, confidential } = featured.data;
         const href = confidential ? '#contact' : `/work/${featured.id}`;
         return (
-          <section data-filter-card data-tags={tag.toLowerCase()} class="px-5 md:px-16 py-20 flex flex-col md:flex-row gap-12 md:gap-16 items-center bg-cream">
+          <section data-filter-card data-tags={tag.toLowerCase()} class="group relative px-5 md:px-16 py-20 flex flex-col md:flex-row gap-12 md:gap-16 items-center bg-cream">
+            <a href={href} class="absolute inset-0 z-10" aria-label={title}></a>
 
             <!-- Image -->
-            <div class="w-full md:w-[60%] aspect-[16/10] overflow-hidden flex-shrink-0"
+            <div class="w-full md:w-[60%] aspect-[16/10] overflow-hidden flex-shrink-0 relative z-0"
               style="background-color: #E7E1D6;">
               {cover ? (
                 <img
@@ -69,6 +70,7 @@ function splitTag(tag: string): [string, string] {
                   alt={title}
                   class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                   loading="eager"
+                  transition:name={`cover-${featured.id}`}
                 />
               ) : (
                 <div class="w-full h-full flex items-center justify-center"
@@ -79,7 +81,7 @@ function splitTag(tag: string): [string, string] {
             </div>
 
             <!-- Text -->
-            <div class="w-full md:w-[40%] flex flex-col gap-5">
+            <div class="w-full md:w-[40%] flex flex-col gap-5 relative z-20">
               <span class="eyebrow text-accent">Featured Project</span>
               <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal leading-tight">
                 {title}
@@ -88,9 +90,8 @@ function splitTag(tag: string): [string, string] {
                 {summary}
               </p>
               <div class="pt-4">
-                <a
-                  href={href}
-                  class="group inline-flex items-center gap-2 font-sans text-[13px] font-semibold tracking-widest uppercase text-navy hover:text-accent transition-colors duration-200"
+                <span
+                  class="inline-flex items-center gap-2 font-sans text-[13px] font-semibold tracking-widest uppercase text-navy group-hover:text-accent transition-colors duration-200 relative z-20"
                 >
                   <span class="underline-offset-4 group-hover:underline">
                     {confidential ? 'Request case study' : 'View case study'}
@@ -99,7 +100,7 @@ function splitTag(tag: string): [string, string] {
                     class="material-symbols-outlined translate-x-0 group-hover:translate-x-1.5 transition-transform duration-300"
                     style="font-size: 17px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;"
                   >arrow_forward</span>
-                </a>
+                </span>
               </div>
             </div>
 
@@ -119,14 +120,16 @@ function splitTag(tag: string): [string, string] {
             const href = confidential ? '#contact' : `/work/${project.id}`;
             const [cat1, cat2] = splitTag(tag);
             return (
-              <article data-filter-card data-tags={tag.toLowerCase()} class="flex flex-col gap-6">
-                <a href={href} class="block overflow-hidden aspect-[4/3] group" style="background-color: #E7E1D6;">
+              <article data-filter-card data-tags={tag.toLowerCase()} class="group relative flex flex-col gap-6">
+                <a href={href} class="absolute inset-0 z-10" aria-label={title}></a>
+                <div class="block overflow-hidden aspect-[4/3] relative z-0" style="background-color: #E7E1D6;">
                   {cover ? (
                     <img
                       src={cover}
                       alt={title}
                       class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                       loading="lazy"
+                      transition:name={`cover-${project.id}`}
                     />
                   ) : (
                     <div class="w-full h-full flex items-center justify-center"
@@ -134,7 +137,7 @@ function splitTag(tag: string): [string, string] {
                       <span class="eyebrow text-navy/25">[Project preview]</span>
                     </div>
                   )}
-                </a>
+                </div>
 
                 <div class="flex flex-col gap-3">
                   <div class="flex items-center gap-3">
@@ -147,18 +150,14 @@ function splitTag(tag: string): [string, string] {
                     )}
                   </div>
                   <h3 class="font-serif text-[22px] text-navy font-medium leading-snug">
-                    {confidential
-                      ? <span>{title}</span>
-                      : <a href={href} class="hover:opacity-70 transition-opacity">{title}</a>
-                    }
+                    {title}
                   </h3>
                   <p class="font-sans text-[15px] leading-relaxed text-muted max-w-sm">
                     {summary}
                   </p>
                   <div class="pt-2">
-                    <a
-                      href={href}
-                      class="group inline-flex items-center gap-2 font-sans text-[12px] font-semibold tracking-widest uppercase text-navy hover:text-accent transition-colors duration-200"
+                    <span
+                      class="inline-flex items-center gap-2 font-sans text-[12px] font-semibold tracking-widest uppercase text-navy group-hover:text-accent transition-colors duration-200 relative z-20"
                     >
                       <span class="underline-offset-4 group-hover:underline">
                         {confidential ? 'Request case study' : 'View case study'}
@@ -167,7 +166,7 @@ function splitTag(tag: string): [string, string] {
                         class="material-symbols-outlined translate-x-0 group-hover:translate-x-1.5 transition-transform duration-300"
                         style="font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;"
                       >arrow_forward</span>
-                    </a>
+                    </span>
                   </div>
                 </div>
               </article>

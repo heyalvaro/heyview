@@ -7,6 +7,8 @@ client: Confidential — multinational manufacturer
 industry: Manufacturing · Finance Operations
 services: Process Automation, Systems Design
 period: Jan – Apr 2025
+team: Process Design, Integration Engineer, Finance Lead
+tools: Power Automate, Excel, SQL, Analytics
 year: 2025
 order: 3
 featured: false
