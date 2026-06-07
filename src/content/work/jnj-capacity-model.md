@@ -2,7 +2,7 @@
 title: Manufacturing capacity planning system
 tag: "MEDICAL DEVICES   POWER PLATFORM"
 summary: A multi-site capacity planning system for Johnson & Johnson MedTech — replacing a 350MB, 143-sheet spreadsheet with a live Power Platform model across two sites and six departments.
-cover: https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1440&q=80
+cover: /work/jnj/jnj-capacity-model-cover.png
 client: Johnson & Johnson MedTech (Shockwave Medical)
 industry: Medical Devices · Manufacturing Operations
 services: Capacity Planning, Power Platform, UX Design

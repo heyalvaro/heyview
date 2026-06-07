@@ -5,12 +5,14 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 import JnjStory from '../../components/work/JnjStory.astro';
+import CoolBrandStory from '../../components/work/CoolBrandStory.astro';
 import CaseStudyStory from '../../components/work/CaseStudyStory.astro';
 import Gallery from '../../components/Gallery.astro';
 import { CAL_LINK, CAL_NAMESPACE, CAL_CONFIG } from '../../config';
 
 const customStories: Record<string, any> = {
   'jnj-capacity-model': JnjStory,
+  'coolbrand': CoolBrandStory,
 };
 
 export const getStaticPaths = (async () => {
