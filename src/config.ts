@@ -12,7 +12,7 @@ export const SITE = {
   shortName: 'HeyView',
   tagline: 'Clarity for complex systems.',
   description:
-    'We design the systems and experiences that make your business sharper, faster, and easier to scale. Automation, design, and AI for specialty practices.',
+    'We design the systems and experiences that make your business sharper, faster, and easier to scale. Automation, design, and AI for businesses that run on complex operations.',
   /** Default social-share image, served from /public. 1200×630 recommended. */
   ogImage: '/og-image.jpg',
   founders: ['Alvaro Hernandez', 'Sinaí Alfaro'],
