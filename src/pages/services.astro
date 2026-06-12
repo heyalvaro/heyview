@@ -8,10 +8,10 @@ const services = [
   {
     number: '01',
     eyebrow: 'Process automation',
-    title: 'Your business runs on a process that shouldn't exist.',
-    body: 'If a document takes three people and two days to produce every week, that's not a process. That's a problem with a routine. We automate the manual workflows that quietly slow a business: generating documents, routing approvals, moving data between systems, chasing the same signature for the fourth time.',
-    outcome: 'Hours back every week. Fewer errors. Work that doesn't depend on who's in the office.',
-    example: 'We've automated finance workflows for enterprise operations where a single report used to consume days of senior people's time. Same patterns, applied to your scale.',
+    title: "Your business runs on a process that shouldn't exist.",
+    body: "If a document takes three people and two days to produce every week, that's not a process. That's a problem with a routine. We automate the manual workflows that quietly slow a business: generating documents, routing approvals, moving data between systems, chasing the same signature for the fourth time.",
+    outcome: "Hours back every week. Fewer errors. Work that doesn't depend on who's in the office.",
+    example: "We've automated finance workflows for enterprise operations where a single report used to consume days of senior people's time. Same patterns, applied to your scale.",
   },
   {
     number: '02',
@@ -27,13 +27,13 @@ const services = [
     title: 'Stop running the business from a spreadsheet only one person understands.',
     body: 'Reports tell you what happened. We build dashboards that tell you what to do next — designed for the person making the decision, not the person exporting the CSV. Daily view for the team. Weekly numbers for the owner. One version of the truth.',
     outcome: 'A screen your team actually opens every morning. Numbers you can defend.',
-    example: 'We've designed capacity-planning and finance dashboards for multinational operations. Yours won't need 143 sheets.',
+    example: "We've designed capacity-planning and finance dashboards for multinational operations. Yours won't need 143 sheets.",
   },
   {
     number: '04',
     eyebrow: 'Integrations',
-    title: 'You already pay for good software. It just doesn't talk to itself.',
-    body: 'We don't sell platforms and we won't make you replace anything. We build the layer on top: connecting your scheduling tool to your billing, your CRM to your spreadsheets, your forms to the system that actually needs the data. And when the problem is unusual — searchable company knowledge, AI over years of documents — this is where we build that too.',
+    title: "You already pay for good software. It just doesn't talk to itself.",
+    body: "We don't sell platforms and we won't make you replace anything. We build the layer on top: connecting your scheduling tool to your billing, your CRM to your spreadsheets, your forms to the system that actually needs the data. And when the problem is unusual — searchable company knowledge, AI over years of documents — this is where we build that too.",
     outcome: 'The stack you already have, working as one system.',
     example: null,
   },
@@ -48,7 +48,7 @@ const stages = [
   {
     number: '02',
     title: 'Strategy',
-    body: 'You get a written plan: what we'll build, what it replaces, and a fixed quote. You know the full cost before we write a line of code.',
+    body: "You get a written plan: what we'll build, what it replaces, and a fixed quote. You know the full cost before we write a line of code.",
   },
   {
     number: '03',
@@ -58,7 +58,7 @@ const stages = [
   {
     number: '04',
     title: 'Handoff',
-    body: 'You own everything: documented, transferred, explained. If we did our job, you don't need us afterward. Most clients keep us anyway, to evolve the system.',
+    body: "You own everything: documented, transferred, explained. If we did our job, you don't need us afterward. Most clients keep us anyway, to evolve the system.",
   },
 ];
 ---
@@ -210,7 +210,7 @@ const stages = [
                 {[
                   'Your business runs on real operations — appointments, documents, approvals, inventory, billing.',
                   'You already use modern software.',
-                  'Something grew recently and the processes didn't keep up.',
+                  "Something grew recently and the processes didn't keep up.",
                   'You can make this decision without a committee.',
                 ].map((item) => (
                   <li class="flex gap-3 items-start">
@@ -224,7 +224,7 @@ const stages = [
               <h3 class="font-serif text-[20px] text-navy font-medium mb-6">This isn't for you if</h3>
               <ul class="space-y-4">
                 {[
-                  'You're looking for the cheapest option.',
+                  "You're looking for the cheapest option.",
                   'You want a pile of AI experiments instead of a working system.',
                   'Your procurement process is longer than our delivery.',
                 ].map((item) => (
@@ -250,8 +250,9 @@ const stages = [
             The systems are horizontal. The pain is specific. We go deep where we know the industry from the inside.
           </p>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-0" style="border: 0.5px solid #E7E1D6;">
+            <!-- TODO: update href to /health when that page is built -->
             <a
-              href="/health"
+              href="/#contact"
               class="group p-10 md:p-12 flex flex-col gap-6 hover:bg-cream transition-colors duration-200"
               style="border-right: 0.5px solid #E7E1D6;"
             >
@@ -280,7 +281,7 @@ const stages = [
 
       <!-- 8. CTA -->
       <section class="grain bg-cream px-5 md:px-16 py-24 md:py-32" style="border-bottom: 0.5px solid #E7E1D6;">
-        <div class="max-w-[1280px] mx-auto max-w-2xl">
+        <div class="max-w-[1280px] mx-auto"><div class="max-w-2xl">
           <span class="eyebrow text-navy/60 block mb-8">Let's talk</span>
           <h2 class="font-serif text-[32px] md:text-[48px] text-navy font-normal leading-[1.15] mb-8">
             Thirty minutes on your operation. Not a sales call.
@@ -301,7 +302,7 @@ const stages = [
               No prep needed. Cameras optional. English or Spanish.
             </span>
           </div>
-        </div>
+        </div></div>
       </section>
 
     </main>
