@@ -2,6 +2,7 @@
 title: Enterprise finance automation
 tag: "FINANCE   PROCESS AUTOMATION"
 summary: A multinational manufacturer was spending 80+ hours per month on a finance close process that ran on copy-paste and spreadsheets. We rebuilt it in four weeks.
+cover: /work/finance-automation/finance-automation-cover.png
 client: Confidential — multinational manufacturer
 industry: Manufacturing · Finance Operations
 services: Process Automation, Systems Design
