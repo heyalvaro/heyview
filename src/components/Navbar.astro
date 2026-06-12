@@ -19,7 +19,7 @@ const links = [
   style="border-right: 0.5px solid var(--color-cream-border);"
 >
   <div class="flex items-center justify-between px-5 py-6" style="border-bottom: 0.5px solid var(--color-cream-border);">
-    <span class="font-serif text-[22px] font-semibold text-navy tracking-[0.5px]">HeyView</span>
+    <a href="/" class="font-serif text-[22px] font-semibold text-navy tracking-[0.5px]">HeyView</a>
     <button id="nav-close" aria-label="Close menu" class="text-navy p-1">
       <span class="material-symbols-outlined text-[20px]">close</span>
     </button>
@@ -89,28 +89,36 @@ const links = [
 </header>
 
 <script>
-  const openBtn  = document.getElementById('nav-open');
-  const closeBtn = document.getElementById('nav-close');
-  const drawer   = document.getElementById('mobile-nav');
-  const backdrop = document.getElementById('nav-backdrop');
+  function setupNav() {
+    const openBtn  = document.getElementById('nav-open');
+    const closeBtn = document.getElementById('nav-close');
+    const drawer   = document.getElementById('mobile-nav');
+    const backdrop = document.getElementById('nav-backdrop');
 
-  function openNav() {
-    drawer?.classList.remove('-translate-x-full');
-    backdrop?.classList.remove('hidden');
-    openBtn?.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
+    function openNav() {
+      drawer?.classList.remove('-translate-x-full');
+      backdrop?.classList.remove('hidden');
+      openBtn?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeNav() {
+      drawer?.classList.add('-translate-x-full');
+      backdrop?.classList.add('hidden');
+      openBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    openBtn?.addEventListener('click', openNav);
+    closeBtn?.addEventListener('click', closeNav);
+    backdrop?.addEventListener('click', closeNav);
+
+    const handleEscape = (e: KeyboardEvent) => { if (e.key === 'Escape') closeNav(); };
+    document.addEventListener('keydown', handleEscape);
+
+    drawer?.querySelectorAll('a[href]').forEach((link) => link.addEventListener('click', closeNav));
   }
 
-  function closeNav() {
-    drawer?.classList.add('-translate-x-full');
-    backdrop?.classList.add('hidden');
-    openBtn?.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  openBtn?.addEventListener('click', openNav);
-  closeBtn?.addEventListener('click', closeNav);
-  backdrop?.addEventListener('click', closeNav);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
-  drawer?.querySelectorAll('a[href]').forEach((link) => link.addEventListener('click', closeNav));
+  setupNav();
+  document.addEventListener('astro:after-swap', setupNav);
 </script>
