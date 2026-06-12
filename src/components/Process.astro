@@ -4,27 +4,23 @@ import { CAL_LINK, CAL_CONFIG } from '../config';
 const steps = [
   {
     number: '01',
-    week: 'Week 01',
     title: 'Discovery',
-    body: 'Mapping the complex technical landscape and defining core constraints.',
+    body: "We map how the work actually happens, not how the org chart says it happens. Expect uncomfortable questions.",
   },
   {
     number: '02',
-    week: 'Week 02',
     title: 'Strategy',
-    body: 'Establishing the architectural blueprint and design tokens.',
+    body: "You get a written plan: what we'll build, what it replaces, and a fixed quote. You know the full cost before we write a line of code.",
   },
   {
     number: '03',
-    week: 'Week 03',
     title: 'Execution',
-    body: 'Developing the system with rapid iterative feedback loops.',
+    body: "We build it. You see progress every week, on the real system, not in slides.",
   },
   {
     number: '04',
-    week: 'Week 04',
     title: 'Handoff',
-    body: 'Delivering precise documentation and production-ready code.',
+    body: "You own everything: documented, transferred, explained. If we did our job, you don't need us afterward.",
   },
 ];
 ---
@@ -35,7 +31,7 @@ const steps = [
   <span class="eyebrow text-navy/60 block mb-6">Our process</span>
 
   <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal mb-20 leading-tight">
-    Four weeks. One system. Zero ambiguity.
+    Four stages. No surprises.
   </h2>
 
   <div class="relative">
@@ -61,7 +57,6 @@ const steps = [
             >
               {step.number}
             </span>
-            <span class="eyebrow text-navy/60 block mb-3">{step.week}</span>
             <h3 class="font-serif text-[22px] text-navy font-normal mb-2">{step.title}</h3>
             <p class="font-sans text-[13px] text-navy/70 leading-relaxed">{step.body}</p>
           </div>

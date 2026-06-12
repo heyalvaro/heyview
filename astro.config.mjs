@@ -7,6 +7,9 @@ import sitemap from '@astrojs/sitemap';
 // sitemap). Components read it via `Astro.site`. Update here only.
 export default defineConfig({
   site: 'https://heyview.studio',
+  redirects: {
+    '/work/jnj-capacity-model': '/work/capacity-planning-system',
+  },
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
