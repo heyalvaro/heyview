@@ -33,6 +33,11 @@ stats:
   - { value: "2.4x", label: "Faster patient processing" }
   - { value: "98%", label: "Staff adoption rate" }
   - { value: "3 sites", label: "Live and growing" }
+testimonial:
+  quote: >
+    HeyView didn't just build us a system — they understood how a clinic actually runs. Intake stopped being a bottleneck within the first month.
+  author: "Dr. Elena Vargas"
+  role: "Medical Director · Nexus Health"
 gallery:
   - { src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1440&q=80", caption: "Intake interface design" }
   - { src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80" }

@@ -44,6 +44,12 @@ const work = defineCollection({
       features: z.array(z.object({ title: z.string(), body: z.string() })),
     }).optional(),
     results: z.object({ intro: z.string() }).optional(),
+    /** Pull quote shown below The Results section. */
+    testimonial: z.object({
+      quote: z.string(),
+      author: z.string(),
+      role: z.string(),
+    }).optional(),
     /** Team members or roles, e.g. "Design Lead, Frontend, PM". */
     team: z.string().optional(),
     /** Tools used, e.g. "Figma, React, Power Platform". */

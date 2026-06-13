@@ -29,7 +29,7 @@ export const getStaticPaths = (async () => {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const CustomStory = customStories[project.id];
-const { title, summary, tag, cover, client, year, industry, services, period, team, tools, stats, gallery, context, solution, results } =
+const { title, summary, tag, cover, client, year, industry, services, period, team, tools, stats, gallery, context, solution, results, testimonial } =
   project.data;
 
 const pageUrl = new URL(`/work/${project.id}`, Astro.site).href;
@@ -230,6 +230,26 @@ const schema = {
                   );
                 })}
               </div>
+            </div>
+          </section>
+        )}
+
+        <!-- ── Testimonial ─────────────────────────────────────────────── -->
+        {testimonial && (
+          <section class="bg-surface" style="border-top: 0.5px solid #E7E1D6;">
+            <div class="max-w-360 mx-auto px-5 md:px-16 py-20 md:py-28 flex flex-col items-center text-center">
+              <span class="eyebrow mb-8" style="color: #A67C52;">In Their Words</span>
+              <span
+                class="font-serif text-[56px] md:text-[72px] leading-none select-none mb-4"
+                style="color: #A67C52; line-height: 0.6;"
+                aria-hidden="true"
+              >&ldquo;</span>
+              <blockquote class="font-serif italic text-[22px] md:text-[30px] text-primary font-normal leading-snug max-w-2xl mt-6">
+                {testimonial.quote}
+              </blockquote>
+              <div class="mt-10 mb-4 w-8" style="border-top: 0.5px solid #E7E1D6;"></div>
+              <p class="eyebrow text-primary mb-2">{testimonial.author}</p>
+              <p class="font-sans text-[13px] text-secondary">{testimonial.role}</p>
             </div>
           </section>
         )}
