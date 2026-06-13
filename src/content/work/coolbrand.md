@@ -29,6 +29,10 @@ gallery:
   - src: /work/coolbrand/coolbrand-sketch-2.png
     caption: Layout exploration
 tools: Shopify
+testimonial:
+  quote: "Honestly, I think we have the best jewelry website in Costa Rica — by far. It came out incredibly well."
+  author: Sebastián Soto
+  role: CoolBrand CR
 featured: true
 order: 1
 ---
@@ -50,9 +54,5 @@ Their existing Shopify site had traffic. That wasn't the problem. The design fel
 **Templates & content system.** Product and collection page templates built so the client can upload new inventory without rebuilding layouts — maintaining the premium feel as inventory changes.
 
 ## The outcome
-
-> *"La página me encanta, me parece super elegante, super bonita, original y obviamente muchísimo mejor a la que teníamos."*
-
-> *"A mí me parece que tenemos la mejor página de Costa Rica en joyería, por mucho, demasiado bien."*
 
 The redesign turned a site generating no customer conversations into the business's primary sales channel. Customers began sharing screenshots and links with each other — a signal that the design resonated enough to become a product people shared, not just found.

@@ -56,26 +56,45 @@ const stats = [
 
   <script>
     const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+
+    const animate = (el: HTMLElement) => {
+      if (el.dataset.counted) return;
+      el.dataset.counted = 'true';
+      const target = parseInt(el.dataset.count ?? '0', 10);
+      const suffix = el.dataset.suffix ?? '';
+      const duration = 1200;
+      const start = performance.now();
+      const tick = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(ease * target) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
-        const el = entry.target as HTMLElement;
-        const target = parseInt(el.dataset.count ?? '0', 10);
-        const suffix = el.dataset.suffix ?? '';
-        const duration = 1200;
-        const start = performance.now();
-        const tick = (now: number) => {
-          const progress = Math.min((now - start) / duration, 1);
-          const ease = 1 - Math.pow(1 - progress, 3);
-          el.textContent = Math.round(ease * target) + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-        observer.unobserve(el);
+        animate(entry.target as HTMLElement);
+        observer.unobserve(entry.target);
       });
     }, { threshold: 0.4 });
 
-    counters.forEach(el => observer.observe(el));
+    const inViewport = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      return r.top < vh && r.bottom > 0;
+    };
+
+    // Direct hash navigation (e.g. /#contact) can leave the page already
+    // scrolled to this section before the observer's first async callback,
+    // which then never re-fires. Animate anything already on-screen now,
+    // and only observe what's still below the fold.
+    counters.forEach(el => {
+      if (inViewport(el)) animate(el);
+      else observer.observe(el);
+    });
   </script>
 
 </section>
