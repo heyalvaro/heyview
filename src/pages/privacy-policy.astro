@@ -3,13 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 
-const lastUpdated = 'May 29, 2026';
+const lastUpdated = 'June 9, 2026';
 
 const sections = [
   {
     id: 'who-we-are',
     title: 'Who We Are',
-    content: `HeyView is an independent design and AI studio operated by Tojii Company SRL, a company registered in Costa Rica. We work with specialty practices and professional service firms to design systems, automations, and digital experiences that help their businesses run better.
+    content: `HeyView is an independent design and AI studio operated by Tojii Company SRL, a company registered in Costa Rica. We work with businesses that run on complex operations — helping them design systems, automations, and digital experiences that make their work sharper and easier to scale.
 
 This Privacy Policy describes how we collect, use, and protect information when you visit our website (heyview.studio) or interact with us.`,
   },
@@ -22,7 +22,7 @@ This Privacy Policy describes how we collect, use, and protect information when 
 When you book a discovery call through Cal.com, you share your name, email address, and any details you include in the booking form. We receive this information to prepare for and conduct our meeting.
 
 **Information collected automatically:**
-When you visit our website, basic technical data is processed as part of normal web server operations (such as your browser type and IP address). We do not use analytics services that track your behavior across sites.
+When you visit our website, we use PostHog — a third-party analytics service — to collect data about how visitors interact with the site. This includes pages visited, time spent, clicks, and session duration. PostHog assigns a unique identifier to your browser using a cookie so we can understand returning visits and aggregate usage patterns. This data is processed on PostHog's servers in the United States.
 
 **Information from third-party services:**
 Our website loads icon fonts from Google's servers (Material Symbols). This means Google receives a request from your browser, which may include your IP address and browser information, subject to Google's own privacy policy.`,
@@ -42,9 +42,11 @@ We do not sell, rent, or share your personal information with third parties for 
   {
     id: 'cookies',
     title: 'Cookies & Tracking',
-    content: `Our website itself does not set tracking cookies or use analytics tools that build profiles of your behavior.
+    content: `Our website uses PostHog for analytics. PostHog sets a first-party cookie (prefixed \`ph_\`) to identify your browser session across visits. This helps us understand which pages are most useful and where the site can be improved. PostHog does not use this data to build ad profiles or track you across unrelated websites.
 
-Cal.com, our scheduling provider, may set cookies when you interact with the booking widget. These cookies are governed by Cal.com's own privacy policy. You can decline the booking interaction and contact us directly at privacy@heyview.studio if you prefer not to use Cal.com.`,
+Cal.com, our scheduling provider, may also set cookies when you interact with the booking widget. These are governed by Cal.com's own privacy policy.
+
+If you prefer not to be tracked, you can block analytics cookies through your browser settings or a content blocker. You can also contact us directly at privacy@heyview.studio if you have questions about opting out.`,
   },
   {
     id: 'third-party-services',
@@ -52,6 +54,8 @@ Cal.com, our scheduling provider, may set cookies when you interact with the boo
     content: `We use the following third-party services on this website:
 
 **Cal.com** — appointment scheduling. When you book a call, your name, email, and meeting details are processed by Cal.com. Their privacy policy applies to that data.
+
+**PostHog** — website analytics. PostHog collects behavioral data about site visits (page views, clicks, session duration) and processes it on servers in the United States. You can review their privacy policy at posthog.com/privacy.
 
 **Google Fonts / Material Symbols** — icon rendering. Loading these resources sends a network request to Google's CDN, subject to Google's privacy policy.
 

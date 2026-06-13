@@ -1,0 +1,54 @@
+---
+const verticals = [
+  {
+    label: 'Specialty practices',
+    description: 'Booking, no-show recovery, and a practice dashboard for clinics that are growing.',
+    href: '/health',
+  },
+  {
+    label: 'Finance & operations',
+    description: 'Close, reporting, and reconciliation rebuilt to run in days, not weeks.',
+    href: '#contact', // TODO: update to /finance-ops when built
+  },
+  {
+    label: 'Your industry',
+    description: 'The systems are reusable. Tell us your operation.',
+    href: '#contact',
+  },
+];
+---
+
+<section class="bg-primary px-5 md:px-16 py-24" style="border-bottom: 0.5px solid rgba(245,240,232,0.1);">
+
+  <span class="eyebrow block mb-6" style="color: rgba(245,240,232,0.45);">Who we work with</span>
+
+  <h2 class="font-serif text-[32px] md:text-[40px] text-cream leading-tight mb-12">
+    Built for operations, sharpened by industry.
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3">
+    {verticals.map((v, i) => (
+      <a
+        href={v.href}
+        class:list={[
+          'group flex flex-col gap-4 p-8 transition-colors hover:bg-white/4',
+          i < verticals.length - 1 ? 'border-b md:border-b-0 md:border-r' : '',
+        ]}
+        style={[
+          'border: 0.5px solid rgba(245,240,232,0.12);',
+          i > 0 ? 'border-left: none;' : '',
+          i < verticals.length - 1 ? 'border-right-width: 0.5px;' : '',
+        ].join(' ')}
+      >
+        <span class="eyebrow" style="color: #7a9e78;">{v.label}</span>
+        <p class="font-sans text-[15px] leading-relaxed flex-1" style="color: rgba(245,240,232,0.65);">
+          {v.description}
+        </p>
+        <span class="font-sans text-[13px] font-medium transition-colors" style="color: rgba(245,240,232,0.5);">
+          Tell us about your operation →
+        </span>
+      </a>
+    ))}
+  </div>
+
+</section>

@@ -1,0 +1,310 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { CAL_LINK, CAL_NAMESPACE, CAL_CONFIG } from '../config';
+
+const services = [
+  {
+    number: '01',
+    eyebrow: 'Process automation',
+    title: "Your business runs on a process that shouldn't exist.",
+    body: "If a document takes three people and two days to produce every week, that's not a process. That's a problem with a routine. We automate the manual workflows that quietly slow a business: generating documents, routing approvals, moving data between systems, chasing the same signature for the fourth time.",
+    outcome: "Hours back every week. Fewer errors. Work that doesn't depend on who's in the office.",
+    example: "We've automated finance workflows for enterprise operations where a single report used to consume days of senior people's time. Same patterns, applied to your scale.",
+  },
+  {
+    number: '02',
+    eyebrow: 'Customer communication',
+    title: 'Every unanswered message is revenue walking out the door.',
+    body: 'Your customers write at 9 PM on WhatsApp, Instagram, and email — and they buy from whoever answers first. We build AI assistants that respond instantly, book the appointment, confirm it, follow up, and win back the ones who went quiet. In your tone, with your rules, and with a human taking over the moment it matters.',
+    outcome: 'Faster response than any front desk. Fewer missed leads and no-shows. Recovered revenue you can actually count.',
+    example: 'For appointment-based businesses, this is usually the system that pays for itself first.',
+  },
+  {
+    number: '03',
+    eyebrow: 'Dashboards',
+    title: 'Stop running the business from a spreadsheet only one person understands.',
+    body: 'Reports tell you what happened. We build dashboards that tell you what to do next — designed for the person making the decision, not the person exporting the CSV. Daily view for the team. Weekly numbers for the owner. One version of the truth.',
+    outcome: 'A screen your team actually opens every morning. Numbers you can defend.',
+    example: "We've designed capacity-planning and finance dashboards for multinational operations. Yours won't need 143 sheets.",
+  },
+  {
+    number: '04',
+    eyebrow: 'Integrations',
+    title: "You already pay for good software. It just doesn't talk to itself.",
+    body: "We don't sell platforms and we won't make you replace anything. We build the layer on top: connecting your scheduling tool to your billing, your CRM to your spreadsheets, your forms to the system that actually needs the data. And when the problem is unusual — searchable company knowledge, AI over years of documents — this is where we build that too.",
+    outcome: 'The stack you already have, working as one system.',
+    example: null,
+  },
+];
+
+const stages = [
+  {
+    number: '01',
+    title: 'Discovery',
+    body: 'We map how the work actually happens, not how the org chart says it happens. Expect uncomfortable questions.',
+  },
+  {
+    number: '02',
+    title: 'Strategy',
+    body: "You get a written plan: what we'll build, what it replaces, and a fixed quote. You know the full cost before we write a line of code.",
+  },
+  {
+    number: '03',
+    title: 'Execution',
+    body: 'We build it. You see progress every week, on the real system, not in slides.',
+  },
+  {
+    number: '04',
+    title: 'Handoff',
+    body: "You own everything: documented, transferred, explained. If we did our job, you don't need us afterward. Most clients keep us anyway, to evolve the system.",
+  },
+];
+---
+
+<Layout
+  title="Services — HeyView"
+  description="Systems that work on a Tuesday morning. Process automation, AI assistants, operations dashboards, and custom integrations — built for businesses that run on real operations."
+>
+  <div class="max-w-360 mx-auto relative shadow-sm">
+    <Navbar transition:persist />
+    <main>
+
+      <!-- 1. Hero -->
+      <section class="grain bg-cream px-5 md:px-16 py-24 md:py-32" style="border-bottom: 0.5px solid #E7E1D6;">
+        <div class="max-w-[1280px] mx-auto">
+          <span class="eyebrow text-navy/60 block mb-8">Services</span>
+          <h1 class="font-serif text-[40px] md:text-[64px] text-navy font-light leading-[1.1] max-w-3xl mb-8">
+            Systems that work on a Tuesday morning.
+          </h1>
+          <p class="font-sans text-[17px] md:text-[20px] text-secondary leading-relaxed max-w-2xl mb-12">
+            Most systems are built to impress in a demo. We build the kind that still runs when the founder is on vacation, the new hire started Monday, and it's just another Tuesday. Automation, internal tools, and AI — built on top of the software you already use.
+          </p>
+          <button
+            data-cal-link={CAL_LINK}
+            data-cal-namespace={CAL_NAMESPACE}
+            data-cal-config={CAL_CONFIG}
+            class="bg-navy text-cream px-8 py-4 font-sans text-[13px] font-medium tracking-wide hover:opacity-90 transition-opacity uppercase cursor-pointer"
+          >
+            Book a discovery call
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. Service sections -->
+      {services.map((service, i) => (
+        <section
+          class:list={['px-5 md:px-16 py-20 md:py-24', i % 2 === 0 ? 'bg-cream' : 'bg-[#F9F5EE]']}
+          style="border-bottom: 0.5px solid #E7E1D6;"
+        >
+          <div class="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
+            <div>
+              <span class="eyebrow text-accent-green block mb-4">{service.eyebrow}</span>
+              <h2 class="font-serif text-[28px] md:text-[36px] text-navy font-normal leading-[1.2] mb-6">
+                {service.title}
+              </h2>
+              <p class="font-sans text-[15px] md:text-[17px] text-secondary leading-relaxed">
+                {service.body}
+              </p>
+            </div>
+            <div class="flex flex-col gap-8">
+              <div style="border-left: 2px solid #A67C52; padding-left: 1.5rem;">
+                <p class="eyebrow text-accent block mb-2">What you get</p>
+                <p class="font-sans text-[15px] text-secondary leading-relaxed">
+                  {service.outcome}
+                </p>
+              </div>
+              {service.example && (
+                <p class="font-sans text-[13px] text-navy/50 leading-relaxed italic">
+                  {service.example}
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      ))}
+
+      <!-- 3. Designed, not just built -->
+      <section class="bg-navy px-5 md:px-16 py-20 md:py-28" style="border-bottom: 0.5px solid rgba(231,225,214,0.15);">
+        <div class="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
+          <div>
+            <h2 class="font-serif text-[32px] md:text-[48px] text-cream font-normal leading-[1.15] mb-6">
+              Designed, not just built.
+            </h2>
+            <p class="font-sans text-[15px] md:text-[17px] leading-relaxed" style="color: rgba(245,240,232,0.75);">
+              Half of this studio is a senior product designer. Every dashboard, internal tool, and workflow we ship gets the same design standard as a public brand site — because software people don't hate using is software people actually use. That's not polish on top. It's why the systems stick.
+            </p>
+          </div>
+          <div
+            class="flex items-center justify-center"
+            style="border: 0.5px solid rgba(231,225,214,0.2); min-height: 240px;"
+          >
+            <p class="font-sans text-[13px] text-cream/30 text-center px-8">
+              Work samples
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. How we work -->
+      <section class="grain bg-cream px-5 md:px-16 py-20 md:py-28" style="border-bottom: 0.5px solid #E7E1D6;">
+        <div class="max-w-[1280px] mx-auto">
+          <span class="eyebrow text-navy/60 block mb-6">How we work</span>
+          <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal mb-20 leading-tight">
+            Four stages. No surprises.
+          </h2>
+          <div class="relative">
+            <div class="absolute bg-cream-border left-[5px] top-0 bottom-0 w-px md:left-0 md:top-[5px] md:bottom-auto md:w-full md:h-px"></div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 relative z-10">
+              {stages.map((stage) => (
+                <div class="flex flex-row md:flex-col gap-6 md:gap-0">
+                  <div class="flex-shrink-0 w-3 md:w-full h-auto md:h-3 flex items-start md:items-center justify-center md:justify-start">
+                    <div class="w-[11px] h-[11px] rounded-full bg-accent ring-2 ring-cream mt-0.5 md:mt-0"></div>
+                  </div>
+                  <div class="pt-0 md:pt-10 flex-1">
+                    <span class="font-serif text-[52px] text-accent leading-none font-normal block mb-3 select-none">
+                      {stage.number}
+                    </span>
+                    <h3 class="font-serif text-[22px] text-navy font-normal mb-2">{stage.title}</h3>
+                    <p class="font-sans text-[13px] text-navy/70 leading-relaxed">{stage.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. The model -->
+      <section class="bg-[#F9F5EE] px-5 md:px-16 py-20 md:py-24" style="border-bottom: 0.5px solid #E7E1D6;">
+        <div class="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
+          <div>
+            <span class="eyebrow text-navy/60 block mb-6">The model</span>
+            <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal leading-tight">
+              Fixed scope. Fixed quote. Senior hands.
+            </h2>
+          </div>
+          <div class="font-sans text-[15px] md:text-[17px] text-secondary leading-relaxed space-y-4">
+            <p>
+              No hourly billing, ever — you buy an outcome, not our time. Scope changes get a new quote, in writing, before anything moves.
+            </p>
+            <p>
+              We take two to three new clients per quarter, and the founders do the work: no account managers, no junior team learning on your project.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Who this is for -->
+      <section class="bg-cream px-5 md:px-16 py-20 md:py-24" style="border-bottom: 0.5px solid #E7E1D6;">
+        <div class="max-w-[1280px] mx-auto">
+          <span class="eyebrow text-navy/60 block mb-6">Fit</span>
+          <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal mb-16 leading-tight">
+            A good fit, honestly.
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-0" style="border: 0.5px solid #E7E1D6;">
+            <div class="p-10 md:p-12" style="border-right: 0.5px solid #E7E1D6; border-bottom: 0.5px solid #E7E1D6;">
+              <h3 class="font-serif text-[20px] text-navy font-medium mb-6">This is for you if</h3>
+              <ul class="space-y-4">
+                {[
+                  'Your business runs on real operations — appointments, documents, approvals, inventory, billing.',
+                  'You already use modern software.',
+                  "Something grew recently and the processes didn't keep up.",
+                  'You can make this decision without a committee.',
+                ].map((item) => (
+                  <li class="flex gap-3 items-start">
+                    <span class="font-serif text-accent text-[18px] leading-none mt-0.5 flex-shrink-0">—</span>
+                    <span class="font-sans text-[14px] text-secondary leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="p-10 md:p-12 bg-[#F9F5EE]" style="border-bottom: 0.5px solid #E7E1D6;">
+              <h3 class="font-serif text-[20px] text-navy font-medium mb-6">This isn't for you if</h3>
+              <ul class="space-y-4">
+                {[
+                  "You're looking for the cheapest option.",
+                  'You want a pile of AI experiments instead of a working system.',
+                  'Your procurement process is longer than our delivery.',
+                ].map((item) => (
+                  <li class="flex gap-3 items-start">
+                    <span class="font-serif text-navy/30 text-[18px] leading-none mt-0.5 flex-shrink-0">—</span>
+                    <span class="font-sans text-[14px] text-secondary/70 leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. By industry -->
+      <section class="bg-[#F9F5EE] px-5 md:px-16 py-20 md:py-24" style="border-bottom: 0.5px solid #E7E1D6;">
+        <div class="max-w-[1280px] mx-auto">
+          <span class="eyebrow text-navy/60 block mb-6">By industry</span>
+          <h2 class="font-serif text-[32px] md:text-[40px] text-navy font-normal mb-4 leading-tight">
+            Where this lands hardest.
+          </h2>
+          <p class="font-sans text-[15px] md:text-[17px] text-secondary leading-relaxed mb-16 max-w-2xl">
+            The systems are horizontal. The pain is specific. We go deep where we know the industry from the inside.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-0" style="border: 0.5px solid #E7E1D6;">
+            <a
+              href="/health"
+              class="group p-10 md:p-12 flex flex-col gap-6 hover:bg-cream transition-colors duration-200"
+              style="border-right: 0.5px solid #E7E1D6;"
+            >
+              <span class="eyebrow text-accent-green">Health</span>
+              <div>
+                <h3 class="font-serif text-[22px] text-navy font-medium mb-3 leading-snug">
+                  Specialty practices
+                </h3>
+                <p class="font-sans text-[13px] text-secondary leading-relaxed">
+                  Stop losing revenue to no-shows and manual admin. Booking, recovery, and a dashboard your front desk will actually use.
+                </p>
+              </div>
+              <span class="font-sans text-[13px] text-accent font-medium group-hover:underline underline-offset-4">
+                See how →
+              </span>
+            </a>
+            <div class="p-10 md:p-12 flex flex-col justify-center items-center opacity-30" style="border-right: 0.5px solid #E7E1D6;">
+              <span class="font-sans text-[13px] text-navy/50">More industries coming</span>
+            </div>
+            <div class="p-10 md:p-12 flex flex-col justify-center items-center opacity-30">
+              <span class="font-sans text-[13px] text-navy/50">More industries coming</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. CTA -->
+      <section class="grain bg-cream px-5 md:px-16 py-24 md:py-32" style="border-bottom: 0.5px solid #E7E1D6;">
+        <div class="max-w-[1280px] mx-auto"><div class="max-w-2xl">
+          <span class="eyebrow text-navy/60 block mb-8">Let's talk</span>
+          <h2 class="font-serif text-[32px] md:text-[48px] text-navy font-normal leading-[1.15] mb-8">
+            Thirty minutes on your operation. Not a sales call.
+          </h2>
+          <p class="font-sans text-[15px] md:text-[17px] text-secondary leading-relaxed mb-12">
+            Tell us where the time leaks — the report nobody wants to build, the spreadsheet everyone fears, the no-shows, the double entry. We'll tell you what we'd automate first and what we wouldn't touch. You leave with a clearer map of your own operation, whether or not we ever work together.
+          </p>
+          <div class="flex flex-col items-start gap-4">
+            <button
+              data-cal-link={CAL_LINK}
+              data-cal-namespace={CAL_NAMESPACE}
+              data-cal-config={CAL_CONFIG}
+              class="bg-navy text-cream px-8 py-4 font-sans text-[13px] font-medium tracking-wide hover:opacity-90 transition-opacity uppercase cursor-pointer"
+            >
+              Book a discovery call
+            </button>
+            <span class="font-sans text-[12px] text-navy/40">
+              No prep needed. Cameras optional. English or Spanish.
+            </span>
+          </div>
+        </div></div>
+      </section>
+
+    </main>
+    <Footer />
+  </div>
+</Layout>

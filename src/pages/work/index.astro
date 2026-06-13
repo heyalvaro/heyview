@@ -23,7 +23,7 @@ function splitTag(tag: string): [string, string] {
 
 <Layout
   title="Work — HeyView"
-  description="Selected work from HeyView — design, automation, and AI systems for specialty practices and complex operations."
+  description="Selected work from HeyView — design, automation, and AI systems for complex operations."
 >
   <div class="max-w-360 mx-auto relative shadow-sm">
     <Navbar transition:persist />
@@ -37,7 +37,7 @@ function splitTag(tag: string): [string, string] {
           The work.
         </h1>
         <p class="font-sans text-[17px] leading-relaxed max-w-2xl" style="color: rgba(245,240,232,0.65);">
-          A growing record of systems and design built for practices that mean business.
+          A growing record of systems and design built for businesses that mean business.
         </p>
 
         <!-- Filter pills -->
@@ -172,47 +172,6 @@ function splitTag(tag: string): [string, string] {
               </article>
             );
           })}
-
-          <!-- In-Progress placeholder -->
-          <article data-filter-card data-placeholder class="flex flex-col gap-6">
-            <div class="relative aspect-[4/3] overflow-hidden" style="background-color: #E7E1D6;">
-              <div class="w-full h-full flex items-center justify-center"
-                style="background: linear-gradient(135deg, #ddd7cd 0%, #ccc6bc 100%);">
-                <span class="eyebrow text-navy/25">[Project preview]</span>
-              </div>
-              <div class="absolute top-4 right-4 px-3 py-1" style="border: 0.5px solid #A87C52;">
-                <span class="eyebrow text-accent">In progress</span>
-              </div>
-            </div>
-            <div class="flex flex-col gap-3">
-              <div class="flex items-center gap-3">
-                <span class="eyebrow text-muted/50">Healthcare</span>
-                <span class="w-1 h-1 rounded-full bg-navy/20" />
-                <span class="eyebrow text-muted/50">AI Systems</span>
-              </div>
-              <h3 class="font-serif text-[22px] text-navy font-medium leading-snug">
-                Specialty medical practice
-              </h3>
-              <p class="font-sans text-[15px] leading-relaxed text-muted max-w-sm">
-                AI operations system — currently in delivery for a specialty practice.
-              </p>
-            </div>
-          </article>
-
-          <!-- Coming Soon placeholder -->
-          <article
-            data-filter-card data-placeholder
-            class="flex flex-col items-center justify-center text-center gap-4 p-12 min-h-80"
-            style="background-color: #E7E1D6; border: 0.5px solid rgba(30,42,56,0.12);"
-          >
-            <span class="eyebrow text-muted/40">04 / Project Pending</span>
-            <h3 class="font-serif text-[22px] font-medium" style="color: rgba(30,42,56,0.5);">
-              Coming soon
-            </h3>
-            <p class="font-sans text-[13px] italic" style="color: rgba(30,42,56,0.35);">
-              New enterprise platform reveal scheduled for Q4 2025.
-            </p>
-          </article>
 
         </div>
       </section>
